@@ -1,0 +1,45 @@
+﻿@model IEnumerable<ShopDongY.Models.CategoryModel>
+
+@{
+    ViewData["Title"] = "Quản lý Loại";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">Thêm Mới Loại</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên Loại</th>
+            <th class="text-end">Hành động</th> <!-- Thêm cột hành động -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.CategoryName</td>
+                <td class="text-end">
+                    <!-- Căn phải nút -->
+                    <a asp-action="Edit" asp-route-id="@user.CategoryId" class="btn btn-primary btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@user.CategoryId" class="btn btn-danger btn-sm ms-2">Xoá</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<!-- Phân trang -->
+<div class="text-center">
+    <ul class="pagination justify-content-center">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+    </ul>
+</div>

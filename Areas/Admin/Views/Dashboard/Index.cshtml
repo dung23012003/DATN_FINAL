@@ -1,0 +1,155 @@
+﻿
+@{
+    ViewData["Title"] = "Bảng Điều Khiển";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4">
+    
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+
+    <!-- Cards Row -->
+    <div class="row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body">
+                <h5 class="mb-0">Sản phẩm</h5>
+                <h3>@ViewBag.ProductCount</h3>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Chi tiết</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">
+                <h5 class="mb-0">Đơn hàng</h5>
+                <h3>@ViewBag.OrderCount</h3>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Chi tiết</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <h5 class="mb-0">Người dùng</h5>
+                <h3>@ViewBag.UserCount</h3>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" asp-area="Admin" asp-controller="User" asp-action="Index">Chi tiết</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">
+                    <h5 class="mb-0">Thương hiệu</h5>
+                    <h3>@ViewBag.BrandCount</h3>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Brand" asp-action="Index">Chi tiết</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="card bg-revenue mb-4 w-100 shadow-sm border-0">
+            <div class="card text-white bg-info mb-4 w-100 shadow-sm border-0">
+                <div class="card-body text-center">
+                    <h5 class="mb-2">💰 Tổng doanh thu</h5>
+                    <h3 class="fw-bold">
+                        @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} VNĐ", ViewBag.TotalRevenue)
+                    </h3>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between bg-dark bg-opacity-10 border-top-0">
+                    <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Chi tiết</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+</div>
+
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-line me-1"></i> Biểu đồ doanh thu theo tháng
+                </div>
+                <div class="card-body">
+                    <canvas id="barChart2" width="100%" height="40"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i> Biểu đồ sản phẩm theo thương hiệu
+                </div>
+                <div class="card-body">
+                    <canvas id="barChart1" width="100%" height="40"></canvas>
+                </div>
+            </div>
+        </div>
+
+       
+    </div>
+
+    @section Scripts {
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Biểu đồ sản phẩm theo thương hiệu
+            const ctx1 = document.getElementById('barChart1');
+            const barChart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: [@Html.Raw(ViewBag.BrandLabels)],
+                    datasets: [{
+                        label: 'Số sản phẩm',
+                        data: [@ViewBag.BrandCounts],
+                        backgroundColor: '#4e73df'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Biểu đồ doanh thu theo tháng (dạng cột)
+            const ctx2 = document.getElementById('barChart2');
+            const barChart2 = new Chart(ctx2, {
+                type: 'bar', // <-- Đổi từ 'line' sang 'bar'
+                data: {
+                    labels: [@Html.Raw(ViewBag.Months)],
+                    datasets: [{
+                        label: 'Doanh thu (VNĐ)',
+                        data: [@ViewBag.Revenues],
+                        backgroundColor: '#e74a3b'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        </script>
+    }

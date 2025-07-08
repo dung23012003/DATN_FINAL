@@ -1,0 +1,70 @@
+﻿@model ShopDongY.Models.ProductModel
+
+@{
+    ViewData["Title"] = "Cập nhật sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProductId" />
+
+    <div class="form-group mb-3">
+        <label asp-for="ProductName" class="form-label"></label>
+        <input asp-for="ProductName" class="form-control" />
+        <span asp-validation-for="ProductName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">Ảnh sản phẩm hiện tại</label><br />
+        @if (!string.IsNullOrEmpty(Model.ProductImage))
+        {
+            <img src="~/@Model.ProductImage" width="120" />
+        }
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">Chọn ảnh mới (nếu muốn thay)</label>
+        <input type="file" name="ProductImage" class="form-control" />
+        <span asp-validation-for="ProductImage" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="BrandId" class="form-label">Nhãn hiệu</label>
+        <select asp-for="BrandId" class="form-control" asp-items="ViewBag.BrandId">
+            <option value="">--- Chọn nhãn hiệu ---</option>
+        </select>
+        <span asp-validation-for="BrandId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="CategoryId" class="form-label">Loại sản phẩm</label>
+        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+            <option value="">--- Chọn loại sản phẩm ---</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

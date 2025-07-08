@@ -1,0 +1,111 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var currentPath = Context.Request.Path.ToString().ToLower();
+    var hideHeader = currentPath.Contains("/account/login") || currentPath.Contains("/account/register");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ShopDongY</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/default/default.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/ShopDongY.styles.css" asp-append-version="true" />
+
+
+</head>
+<body>
+    @if (!hideHeader)
+    {
+        <!-- Topbar -->
+        <div class="container-fluid topbar bg-light-green d-none d-lg-block">
+            <div class="container py-2 d-flex justify-content-between">
+                <div class="top-info">
+                    <small class="me-4"><i class="fas fa-map-marker-alt me-2"></i>28A LÊ TRỌNG TẤN</small>
+                    <small><i class="fas fa-envelope me-2"></i>nguyendung@Example.com</small>
+                </div>
+                <div class="top-link">
+                    <a href="#" class="text-white me-3"><small>Privacy Policy</small></a> |
+                    <a href="#" class="text-white mx-3"><small>Terms of Use</small></a> |
+                    <a href="#" class="text-white ms-3"><small>Sales and Refunds</small></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navbar -->
+        <header>
+            <nav class="navbar navbar-expand-lg main-navbar shadow-sm bg-white">
+                <div class="container">
+                    <a class="navbar-brand logo-text text-primary fw-bold" asp-controller="Home" asp-action="Index">DongY Store</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarContent">
+                        <!-- Menu -->
+                        <ul class="navbar-nav mx-auto menu-nav">
+                            <li class="nav-item">
+                                <a class="nav-link active" asp-controller="Home" asp-action="Index">Trang Chủ</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Product" asp-action="Index">Cửa hàng</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="#">Tin tức</a></li>
+                            <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
+                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Liên hệ</a></li>
+                        </ul>
+                        <!-- Icon group -->
+                        <ul class="navbar-nav icon-group align-items-center">
+                            @await Component.InvokeAsync("Cart")
+                            <li class="nav-item dropdown">
+                                <a class="nav-icon dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    <i class="fas fa-user"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    @if (Context.Session.GetString("UserName") != null)
+                                    {
+                                        <li>
+                                            <span class="dropdown-item-text fw-bold text-success">
+                                                👤 @Context.Session.GetString("UserName")
+                                            </span>
+                                        </li>
+                                        <li><hr class="dropdown-divider" /></li>
+                                        @if (Context.Session.GetString("Role") == "Admin")
+                                        {
+                                            <li>
+                                                <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">🔧 Quản trị</a>
+                                            </li>
+                                        }
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">🚪 Đăng xuất</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Login">🔑 Đăng nhập</a></li>
+                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Register">📝 Đăng ký</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    }
+    <!-- Tiếp tục với phần còn lại của body -->
+    <div class="container py-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <!-- Footer -->
+    @await Html.PartialAsync("_Footer")
+    <!-- Các script -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

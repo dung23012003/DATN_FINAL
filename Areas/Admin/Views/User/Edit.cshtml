@@ -1,0 +1,73 @@
+﻿@model ShopDongY.Models.UserModel
+
+@{
+    ViewData["Title"] = "Cập nhật người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="UserId" />
+
+    <div class="form-group mb-3">
+        <label asp-for="UserName" class="form-label">Tên Người dùng</label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input asp-for="Email" type="email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="PhoneNumur" class="form-label">Số Điện Thoại</label>
+        <input asp-for="PhoneNumur" type="number" class="form-control" />
+        <span asp-validation-for="PhoneNumur" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Address" class="form-label">Địa Chỉ</label>
+        <input asp-for="Address" type="text" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+    <div class="form-group mb-3">
+        <label asp-for="Password" class="form-label">Mật Khẩu</label>
+        <input asp-for="Password" type="text" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">Ảnh người dùng hiện tại</label><br />
+        @if (!string.IsNullOrEmpty(Model.Avatar))
+        {
+            <img src="~/@Model.Avatar" width="120" />
+        }
+    </div>
+
+    <div class="form-group mb-3">
+        <label class="form-label">Chọn ảnh mới (nếu muốn thay)</label>
+        <input type="file" name="Avatar" class="form-control" />
+        <span asp-validation-for="Avatar" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="RoleId" class="form-label">Vai Trò</label>
+        <select asp-for="RoleId" class="form-control" asp-items="ViewBag.RoleId">
+            <option value="">--- Chọn nhãn hiệu ---</option>
+        </select>
+        <span asp-validation-for="RoleId" class="text-danger"></span>
+    </div>
+
+    
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

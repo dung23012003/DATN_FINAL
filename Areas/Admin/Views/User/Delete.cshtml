@@ -1,0 +1,32 @@
+﻿@model ShopDongY.Models.UserModel
+
+@{
+    ViewData["Title"] = "Xóa người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<h2 class="mb-4 text-danger">Xác nhận xóa người dùng</h2>
+
+<div class="alert alert-warning">
+    Bạn có chắc chắn muốn xóa người dùng <strong>@Model.UserName</strong> không?
+</div>
+
+<div class="mb-3">
+    <strong>Email:</strong> @Model.Email<br />
+    <strong>Vai Trò:</strong> @Model.Role?.RoleName<br />
+    
+    @if (!string.IsNullOrEmpty(Model.Avatar))
+    {
+        <div class="mt-2">
+            <strong>Hình ảnh:</strong><br />
+            <img src="~/@Model.Avatar" width="150" />
+        </div>
+    }
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+</form>

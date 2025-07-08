@@ -1,0 +1,21 @@
+﻿@model ShopDongY.Models.CategoryModel
+
+@{
+    ViewData["Title"] = "Xóa Loại";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<h2 class="mb-4 text-danger">Xác nhận xóa thương hiệu</h2>
+
+<div class="alert alert-warning">
+    Bạn có chắc chắn muốn xóa thương hiệu <strong>@Model.CategoryName</strong> không?
+</div>
+
+
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CategoryId" />
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+</form>

@@ -1,0 +1,75 @@
+﻿@model ShopDongY.Models.ProductModel
+
+@{
+    ViewData["Title"] = "Chi tiết sản phẩm";
+}
+
+<div class="product-details container mt-4">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="product-image-box shadow-sm rounded">
+                <img src="@Url.Content("~/" + Model.ProductImage)" alt="@Model.ProductName" class="img-fluid rounded" />
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <h2 class="product-title mb-3">@Model.ProductName</h2>
+            <div class="product-price text-danger fs-4 fw-bold mb-2">@Model.Price.ToString("N0") VNĐ</div>
+
+            <p class="text-muted mb-3">@Model.Description</p>
+
+            <ul class="list-unstyled mb-4">
+                <li><strong>Ngày đăng:</strong> @Model.TimeAgo</li>
+                <li><strong>Danh mục:</strong> @Model.Categorys?.CategoryName</li>
+                <li><strong>Thương hiệu:</strong> @Model.Brands?.BrandName</li>
+            </ul>
+
+            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="d-inline-block">
+                <input type="hidden" name="productId" value="@Model.ProductId" />
+                <input type="hidden" name="quantity" value="1" />
+                <button type="submit" class="btn btn-success btn-lg">
+                    <i class="fas fa-cart-plus me-2"></i> Thêm vào giỏ hàng
+                </button>
+            </form>
+
+            <a asp-action="Index" class="btn btn-outline-secondary btn-lg ms-2">Quay lại</a>
+        </div>
+    </div>
+    @if (ViewBag.RelatedProducts != null && ViewBag.RelatedProducts.Count > 0)
+    {
+        <hr />
+        <h3 class="mt-5 mb-4">Sản phẩm cùng danh mục</h3>
+        <div class="related-carousel-container">
+            <div class="related-carousel">
+                @foreach (var item in ViewBag.RelatedProducts as List<ShopDongY.Models.ProductModel>)
+                {
+                    <div class="related-item">
+                        <div class="card h-100 shadow-sm">
+                            <a href="@Url.Action("Details", "Product", new { id = item.ProductId })">
+                                <img src="@Url.Content("~/" + item.ProductImage)" class="card-img-top" alt="@item.ProductName" />
+                            </a>
+                            <div class="card-body text-center">
+                                <h6 class="card-title text-truncate">@item.ProductName</h6>
+                                <p class="text-danger fw-bold">@item.Price.ToString("N0") VNĐ</p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <button class="carousel-nav prev">&lt;</button>
+            <button class="carousel-nav next">&gt;</button>
+        </div>
+    }
+
+
+</div>
+
+<script>
+    document.querySelector(".carousel-nav.prev").addEventListener("click", function () {
+        document.querySelector(".related-carousel").scrollBy({ left: -250, behavior: 'smooth' });
+    });
+
+    document.querySelector(".carousel-nav.next").addEventListener("click", function () {
+        document.querySelector(".related-carousel").scrollBy({ left: 250, behavior: 'smooth' });
+    });
+</script>

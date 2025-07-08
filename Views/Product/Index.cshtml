@@ -1,0 +1,105 @@
+﻿@model IEnumerable<ShopDongY.Models.ProductModel>
+@{
+    ViewData["Title"] = "Cửa hàng sản phẩm";
+    var currentCategory = ViewBag.CurrentCategory as string;
+    var categories = ViewBag.Categories as List<ShopDongY.Models.CategoryModel>;
+}
+
+<h2 class="text-center mb-4">Danh sách sản phẩm</h2>
+
+<div class="container-fluid">
+    <div class="row align-items-stretch">
+        <!-- Search Bar -->
+        <div class="col-12 search-header mb-3">
+            <div class="product-search-bar mx-auto">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Tìm sản phẩm..." id="searchInput" value="@Context.Request.Query["searchString"]" />
+                    <button class="btn btn-outline-success" type="button" onclick="searchProducts()">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Category -->
+        <div class="col-md-3 col-lg-2 sidebar">
+            <div class="category-section p-3 bg-light h-100">
+                <h4 class="mb-3">Danh mục sản phẩm</h4>
+                <ul class="list-group h-100">
+                    <li class="list-group-item @(string.IsNullOrEmpty(currentCategory) ? "active" : "")">
+                        <a href="@Url.Action("Index", "Product")" class="text-decoration-none text-dark">Tất cả</a>
+                    </li>
+                    @foreach (var cat in categories)
+                    {
+                        var isActive = currentCategory == cat.CategoryName ? "active" : "";
+                        <li class="list-group-item @isActive">
+                            <a href="@Url.Action("Index", "Product", new { category = cat.CategoryName })"
+                               class="text-decoration-none text-dark">
+                                @cat.CategoryName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+        <!-- Product Column -->
+        <div class="col-md-9 col-lg-10">
+            @if (!Model.Any())
+            {
+                <div class="alert alert-warning text-center" role="alert">
+                    Không có sản phẩm phù hợp với tìm kiếm của bạn.
+                </div>
+            }
+            else
+            {
+                <div class="product-all">
+                    @foreach (var product in Model)
+                    {
+                        <div class="product-card">
+                            <div class="card">
+                                <a href="@Url.Action("Details", "Home", new { id = product.ProductId })">
+                                    <div class="image-container">
+                                        <img src="@Url.Content("~/" + product.ProductImage)" alt="@product.ProductName" />
+                                        <div class="overlay">@product.TimeAgo</div>
+                                    </div>
+                                </a>
+                                <div class="card-body">
+                                    <h2 class="card-title">@product.ProductName</h2>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="price-product fw-bold text-danger">@product.Price.ToString("0,#") VNĐ</div>
+                                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-to-cart-form">
+                                            <input type="hidden" name="productId" value="@product.ProductId" />
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn btn-outline-success btn-cart-icon" title="Thêm vào giỏ hàng">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            const url = new URL(window.location.href);
+            url.searchParams.set('searchString', searchTerm);
+            window.location.href = url.toString();
+        }
+
+        document.getElementById('searchInput')?.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchProducts();
+            }
+        });
+    </script>
+}

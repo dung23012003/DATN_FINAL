@@ -1,0 +1,49 @@
+﻿@model ShopDongY.Models.UserModel
+@{
+    ViewData["Title"] = "Chi tiết tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th colspan="2" class="text-center">
+                <img src="@(string.IsNullOrEmpty(Model.Avatar)
+        ? "/images/default-user-icon.png"
+        : $"/image/user_image/{Model.Avatar}")"
+                     alt="Avatar"
+                     class="rounded-circle shadow"
+                     style="width: 150px; height: 150px; object-fit: cover;" />
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Tên đăng nhập</th>
+            <td>@Model.UserName</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <th>Số điện thoại</th>
+            <td>@Model.PhoneNumur</td>
+        </tr>
+        <tr>
+            <th>Địa chỉ</th>
+            <td>@Model.Address</td>
+        </tr>
+        <tr>
+            <th>Ngày tạo</th>
+            <td>@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+        </tr>
+        <tr>
+            <th>Vai trò</th>
+            <td>@Model.Role?.RoleName</td>
+        </tr>
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">← Quay lại</a>

@@ -1,0 +1,99 @@
+﻿@model List<ShopDongY.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Giỏ hàng của bạn";
+    var total = Model.Sum(item => item.Product.Price * item.Quantity);
+    var totalProduct = Model.Sum(item => item.Quantity);
+}
+
+<div class="containers my-4">
+    <div class="row">
+        <!-- Bên trái: Danh sách sản phẩm -->
+        <div class="col-md-8">
+            <div class="bg-white shadow-sm p-3 rounded">
+                <h5 class="mb-4">🛒 Sản phẩm trong giỏ hàng <span class="badge bg-secondary">@totalProduct</span></h5>
+
+                <table class="table align-middle text-center">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Sản phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-start">
+                                    <strong>@item.Product.ProductName</strong><br />
+                                    
+                                </td>
+                                <td>@item.Product.Price.ToString("N0")₫</td>
+                                <td>
+                                    <div class="d-flex justify-content-center align-items-center">
+                                        <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                            <input type="hidden" name="productId" value="@item.Product.ProductId" />
+                                            <input type="hidden" name="change" value="-1" />
+                                            <button class="btn btn-sm btn-outline-secondary">−</button>
+                                        </form>
+                                        <span class="mx-2">@item.Quantity</span>
+                                        <form asp-action="UpdateQuantity" method="post" class="d-inline">
+                                            <input type="hidden" name="productId" value="@item.Product.ProductId" />
+                                            <input type="hidden" name="change" value="1" />
+                                            <button class="btn btn-sm btn-outline-secondary">+</button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td class="text-danger fw-bold">@((item.Product.Price * item.Quantity).ToString("N0") + " VNĐ")</td>
+
+                                <td>
+                                    <form asp-action="Remove" method="post">
+                                        <input type="hidden" name="productId" value="@item.Product.ProductId" />
+                                        <button class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-outline-success">
+                        <i class="fas fa-shopping-cart me-1"></i> Mua thêm sản phẩm khác
+                    </a>
+                    <a href="#" class="btn btn-danger">
+                        <i class="fas fa-credit-card me-1"></i> Mua hàng
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bên phải: Thông tin chung -->
+        <div class="col-md-4">
+            <div class="bg-white shadow-sm p-3 rounded">
+                <h5>Thông tin chung</h5>
+                <hr />
+                <p><strong>Tổng sản phẩm:</strong> @totalProduct</p>
+                <p><strong>Thành tiền:</strong> @total.ToString("N0")₫</p>
+                <p class="fs-5 text-danger fw-bold">Tổng cộng: @total.ToString("N0")₫</p>
+            </div>
+
+            <div class="delivery-info d-flex justify-content-between mt-4">
+                <div class="info-box text-center flex-fill me-2">
+                    <i class="fas fa-sync-alt fa-2x mb-2 text-primary"></i>
+                    <p class="m-0">Miễn phí đổi trả<br />trong vòng 15 ngày</p>
+                </div>
+                <div class="info-box text-center flex-fill ms-2">
+                    <i class="fas fa-truck fa-2x mb-2 text-success"></i>
+                    <p class="m-0">Giao hàng miễn phí<br />tại HN và HCM</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

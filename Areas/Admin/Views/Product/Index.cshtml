@@ -1,0 +1,53 @@
+﻿@model List<ShopDongY.Models.ProductModel>
+
+@{
+    ViewData["Title"] = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var currentPage = ViewBag.CurrentPage;
+    var totalPages = ViewBag.TotalPages;
+}
+
+
+<a asp-action="Create" class="btn btn-success mb-3">Thêm Mới</a>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th>Danh mục</th>
+            <th>Thương hiệu</th>
+            <th style="width: 150px;">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Price.ToString("N0") ₫</td>
+                <td>@item.Categorys?.CategoryName</td>
+                <td>@item.Brands?.BrandName</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-primary me-1">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
+                        Xóa
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<nav aria-label="Page navigation">
+    <ul class="pagination">
+        @for (int i = 1; i <= totalPages; i++)
+        {
+            <li class="page-item @(i == currentPage ? "active" : "")">
+                <a class="page-link" href="?page=@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

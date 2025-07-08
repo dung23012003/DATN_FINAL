@@ -1,0 +1,140 @@
+﻿@{
+    Layout = null;
+    var userId = Context.Session.GetInt32("UserId");
+    var userName = Context.Session.GetString("UserName");
+    var avatar = string.IsNullOrEmpty(Context.Session.GetString("Avatar"))
+       ? "/images/default-user-icon.png"
+       : $"/image/user_image/{Context.Session.GetString("Avatar")}";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] -  Quản trị ShopĐôngY</title>
+
+    <!-- Bootstrap & FontAwesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #343a40;
+            color: white;
+            padding-top: 20px;
+        }
+
+            .sidebar a {
+                color: white;
+                text-decoration: none;
+                display: block;
+                padding: 10px 20px;
+            }
+
+                .sidebar a:hover,
+                .sidebar a.active {
+                    background-color: #495057;
+                }
+
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #f8f9fa;
+        }
+
+        .topbar {
+            background-color: white;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .content-wrapper {
+            flex-grow: 1;
+            padding: 20px;
+        }
+
+        footer {
+            padding: 10px 20px;
+            background-color: #f1f1f1;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        a.text-success:hover {
+            text-decoration: underline;
+            color: #0a58ca !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h5 class="text-center">Shop Đông Y</h5>
+        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
+        <a asp-area="Admin" asp-controller="Product" asp-action="Index"><i class="fas fa-box me-2"></i>Sản phẩm</a>
+        <a asp-area="Admin" asp-controller="User" asp-action="Index"><i class="fas fa-users me-2"></i>Người dùng</a>
+        <a asp-area="Admin" asp-controller="Role" asp-action="Index"><i class="fas fa-user-tag me-2"></i>Vai trò</a>
+        <a asp-area="Admin" asp-controller="Brand" asp-action="Index"><i class="fas fa-copyright me-2"></i>Thương hiệu</a>
+        <a asp-area="Admin" asp-controller="Category" asp-action="Index"><i class="fas fa-list me-2"></i>Thể loại</a>
+        <hr />
+        <a asp-area="" asp-controller="Account" asp-action="Logout" class="text-danger">
+            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+        </a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="topbar d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">@ViewData["Title"]</h4>
+            <div class="d-flex align-items-center gap-2 text-end">
+                <!-- Avatar hình tròn -->
+                <img src="@avatar"
+                     alt="Avatar"
+                     class="rounded-circle shadow"
+                     style="width: 35px; height: 35px; object-fit: cover;" />
+
+                <!-- Tên người dùng với tooltip -->
+                <span class="text-muted me-2">
+                    Xin chào,
+                    <a asp-area="Admin"
+                       asp-controller="User"
+                       asp-action="Details"
+                       asp-route-id="@userId"
+                       data-bs-toggle="tooltip"
+                       data-bs-placement="bottom"
+                       title="Xem chi tiết thông tin tài khoản"
+                       class="fw-bold text-decoration-none text-success">
+                        @userName
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <div class="content-wrapper">
+            @RenderBody()
+        </div>
+
+        <footer>
+            &copy; 2025 - ShopDongY Admin Dashboard
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Kích hoạt tất cả tooltip trong trang
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        [...tooltipTriggerList].map(el => new bootstrap.Tooltip(el));
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

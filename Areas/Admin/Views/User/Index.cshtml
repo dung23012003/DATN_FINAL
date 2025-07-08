@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ShopDongY.Models.UserModel>
+
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+
+<a asp-action="Create" class="btn btn-success mb-3">Thêm Mới</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên đăng nhập</th>
+            <th>Email</th>
+            <th>SĐT</th>
+            <th>Mật Khẩu</th>
+            <th>Quyền</th>
+            <th>Ngày tạo</th>
+            <th>Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumur</td>
+                <td>@user.Password</td>
+
+                <td>@user.Role?.RoleName</td>
+                <td>@user.CreatedAt.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-primary">Sửa</a> |
+                    <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-danger">Xoá</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div class="text-center">
+    <ul class="pagination justify-content-center">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+    </ul>
+</div>

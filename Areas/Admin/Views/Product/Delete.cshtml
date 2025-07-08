@@ -1,0 +1,32 @@
+﻿@model ShopDongY.Models.ProductModel
+
+@{
+    ViewData["Title"] = "Xóa sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<h2 class="mb-4 text-danger">Xác nhận xóa sản phẩm</h2>
+
+<div class="alert alert-warning">
+    Bạn có chắc chắn muốn xóa sản phẩm <strong>@Model.ProductName</strong> không?
+</div>
+
+<div class="mb-3">
+    <strong>Giá:</strong> @Model.Price.ToString("N0") VNĐ<br />
+    <strong>Nhãn hiệu:</strong> @Model.Brands?.BrandName<br />
+    <strong>Loại sản phẩm:</strong> @Model.Categorys?.CategoryName<br />
+    @if (!string.IsNullOrEmpty(Model.ProductImage))
+    {
+        <div class="mt-2">
+            <strong>Hình ảnh:</strong><br />
+            <img src="~/@Model.ProductImage" width="150" />
+        </div>
+    }
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ProductId" />
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+</form>

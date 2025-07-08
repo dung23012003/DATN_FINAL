@@ -1,0 +1,21 @@
+﻿@model ShopDongY.Models.RoleModel
+
+@{
+    ViewData["Title"] = "Xóa vai trò";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+<h2 class="mb-4 text-danger">Xác nhận xóa vai trò</h2>
+
+<div class="alert alert-warning">
+    Bạn có chắc chắn muốn xóa vai trò <strong>@Model.RoleName</strong> không?
+</div>
+
+
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="RoleId" />
+    <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Hủy</a>
+</form>

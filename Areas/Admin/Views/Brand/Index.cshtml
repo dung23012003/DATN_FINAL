@@ -1,0 +1,44 @@
+﻿@model IEnumerable<ShopDongY.Models.BrandModel>
+
+@{
+    ViewData["Title"] = "Quản lý thương hiệu";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+}
+
+
+<a asp-action="Create" class="btn btn-success mb-3">Thêm Mới</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên thương hiệu</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tbody>
+            @foreach (var user in Model)
+            {
+            <tr>
+                <td>@user.BrandName</td>
+                <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@user.BrandId" class="btn btn-primary btn-sm">Sửa</a>
+                    <a asp-action="Delete" asp-route-id="@user.BrandId" class="btn btn-danger btn-sm ms-1">Xoá</a>
+                </td>
+            </tr>
+            }
+    </tbody>
+
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+<div class="text-center">
+    <ul class="pagination justify-content-center">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+    </ul>
+</div>

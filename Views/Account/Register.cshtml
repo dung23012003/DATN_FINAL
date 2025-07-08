@@ -1,0 +1,52 @@
+﻿@model ShopDongY.Models.UserModel
+@{
+    ViewData["Title"] = "Đăng ký tài khoản";
+}
+<div class="auth-form">
+    <h2>Đăng ký tài khoản</h2>
+    <p>Đã có tài khoản? <a asp-action="Login">Đăng nhập</a></p>
+
+    <form asp-action="Register" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Họ tên *</label>
+                <input asp-for="UserName" class="form-control" required />
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label>Email *</label>
+                <input asp-for="Email" class="form-control" required />
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <label>Số điện thoại</label>
+                <input asp-for="PhoneNumur" class="form-control" />
+            </div>
+            <div class="col-md-6">
+                <label>Địa chỉ *</label>
+                <input asp-for="Address" class="form-control" required />
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-md-6">
+                <label>Mật khẩu *</label>
+                <input asp-for="Password" class="form-control" type="password" required />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label>Nhập lại mật khẩu *</label>
+                <input name="ConfirmPassword" class="form-control" type="password" required />
+            </div>
+        </div>
+
+        <div class="form-check my-3">
+            <input type="checkbox" class="form-check-input" id="terms" required>
+            <label class="form-check-label" for="terms">Tôi đồng ý với <a href="#">Điều khoản</a></label>
+        </div>
+
+        <button class="btn btn-primary w-100">Tạo tài khoản</button>
+    </form>
+</div>

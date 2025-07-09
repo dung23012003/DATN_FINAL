@@ -21,7 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\admin_css\" />
     <Folder Include="wwwroot\image\user_image\" />
     <Folder Include="wwwroot\image\product_image\" />
   </ItemGroup>

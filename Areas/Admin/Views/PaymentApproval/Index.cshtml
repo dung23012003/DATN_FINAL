@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ShopDongY.Models.PaymentModel>
+
+@{
+    ViewData["Title"] = "Duyệt thanh toán";
+}
+
+<h2 class="text-primary mb-3">Danh sách thanh toán đang chờ duyệt</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Không có thanh toán nào đang chờ duyệt.</div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-light">
+            <tr>
+                <th>Mã đơn</th>
+                <th>Email khách</th>
+                <th>Tổng tiền</th>
+                <th>Nội dung CK</th>
+                <th>Ngày tạo</th>
+                <th>Duyệt</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var payment in Model)
+            {
+                <tr>
+                    <td>#@payment.OrderId</td>
+                    <td>@payment.Order.OrderEmail</td>
+                    <td>@payment.TotalAmount.ToString("N0") VNĐ</td>
+                    <td><code>@payment.TransferNote</code></td>
+                    <td>@payment.PaymentDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <form asp-action="Approve" method="post">
+                            <input type="hidden" name="paymentId" value="@payment.PaymentId" />
+                            <button type="submit" class="btn btn-success btn-sm"
+                                    onclick="return confirm('Xác nhận duyệt thanh toán?')">
+                                Duyệt
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

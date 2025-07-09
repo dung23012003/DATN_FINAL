@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Thanh toán Online";
+}
+
+<div class="online-payment-wrapper">
+    <h2 class="mb-3 text-primary fw-bold">Quét mã để thanh toán</h2>
+
+    <p><strong>Số tiền cần thanh toán:</strong> <span class="text-danger">@ViewBag.Amount.ToString("N0") VNĐ</span></p>
+    <p><strong>Nội dung chuyển khoản:</strong> <code>@ViewBag.TransferNote</code></p>
+
+    <div class="text-center my-4">
+        <img src="@ViewBag.QRUrl" alt="QR Thanh toán" class="img-thumbnail shadow-sm" width="300" />
+    </div>
+
+    <p class="text-success fw-semibold mt-3">✅ Sau khi chuyển khoản, hệ thống sẽ tự động cập nhật trạng thái đơn hàng.</p>
+</div>

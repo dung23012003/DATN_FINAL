@@ -11,12 +11,18 @@ namespace ShopDongY.Models
         public virtual UserModel User { get; set; }
         public string OrderEmail { get; set; }
         public decimal TotalAmount { get; set; }
-        public bool Status { get; set; } // e.g., Pending, Completed, Cancelled
+        public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public string ShippingAddress { get; set; }
         public string PhoneNumber { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
         public virtual ICollection<OrderDetailsModel> OrderDetails { get; set; } = new List<OrderDetailsModel>();
-        
+        public virtual PaymentModel? Payment { get; set; }
 
+        public enum OrderStatus
+        {
+            Pending,      // 0: Chờ xử lý
+            Completed,    // 1: Đã thanh toán
+            Cancelled     // 2: Đã hủy
+        }
     }
 }

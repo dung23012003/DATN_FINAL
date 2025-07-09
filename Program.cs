@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using ShopDongY.Data;
 using ShopDongY.Models;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
 
 // C?u hình DbContext
 builder.Services.AddDbContext<ShopDongYContext>(options =>

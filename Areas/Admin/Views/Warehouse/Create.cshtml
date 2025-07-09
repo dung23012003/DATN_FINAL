@@ -1,0 +1,54 @@
+﻿@model ShopDongY.Models.WarehouseModel
+
+@{
+    ViewData["Title"] = "Nhập hàng vào kho";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Nhập hàng cho: <span class="text-primary">@ViewBag.ProductName</span></h2>
+
+    <!-- HIỂN THỊ LỖI VALIDATION -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var state in ViewData.ModelState.Values)
+            {
+                foreach (var error in state.Errors)
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            }
+        </div>
+    }
+
+    <form asp-action="Create" method="post">
+        <input type="hidden" asp-for="ProductId" />
+
+        <div class="mb-3">
+            <label class="form-label">Tên sản phẩm</label>
+            <input class="form-control" value="@ViewBag.ProductName" readonly />
+        </div>
+       
+        <div class="mb-3">
+            <label class="form-label fw-bold text-success">Hàng tồn kho hiện tại:</label>
+            <input class="form-control" value="@ViewBag.QuantityInStock cái" readonly />
+        </div>
+
+
+        <div class="mb-3">
+            <label asp-for="TotalImported" class="form-label">Nhập Thêm</label>
+            <input asp-for="TotalImported" class="form-control" min="1" type="number" step="1" pattern="\d*" inputmode="numeric" />
+            <span asp-validation-for="TotalImported" class="text-danger"></span>
+        </div>
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">
+                <i class="bi bi-box-arrow-in-down"></i> Nhập kho
+            </button>
+            <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-secondary ms-2">
+                <i class="bi bi-arrow-left-circle"></i> Quay lại
+            </a>
+        </div>
+    </form>
+</div>
+

@@ -1,7 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc.Infrastructure
+@inject IActionContextAccessor ActionAccessor
 @{
     var currentPath = Context.Request.Path.ToString().ToLower();
     var hideHeader = currentPath.Contains("/account/login") || currentPath.Contains("/account/register");
+    var currentController = ActionAccessor.ActionContext.RouteData.Values["controller"]?.ToString();
+    var currentAction = ActionAccessor.ActionContext.RouteData.Values["action"]?.ToString();
 }
 
 <!DOCTYPE html>
@@ -48,15 +52,20 @@
                         <!-- Menu -->
                         <ul class="navbar-nav mx-auto menu-nav">
                             <li class="nav-item">
-                                <a class="nav-link active" asp-controller="Home" asp-action="Index">Trang Chủ</a>
+                                <a class="nav-link @(currentController == "Home" && currentAction == "Index" ? "active" : "")"
+                                   asp-controller="Home" asp-action="Index">Trang Chủ</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-controller="Product" asp-action="Index">Cửa hàng</a>
+                                <a class="nav-link @(currentController == "Product" ? "active" : "")"
+                                   asp-controller="Product" asp-action="Index">Cửa hàng</a>
                             </li>
-                            <li class="nav-item"><a class="nav-link" href="#">Tin tức</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Blog</a></li>
-                            <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Liên hệ</a></li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Home" && currentAction == "Contact" ? "active" : "")"
+                                   asp-controller="Home" asp-action="Contact">Liên hệ</a>
+                            </li>
                         </ul>
+
+
                         <!-- Icon group -->
                         <ul class="navbar-nav icon-group align-items-center">
                             @await Component.InvokeAsync("Cart")
@@ -67,10 +76,10 @@
                                 <ul class="dropdown-menu dropdown-menu-end">
                                     @if (Context.Session.GetString("UserName") != null)
                                     {
-                                        <li>
-                                            <span class="dropdown-item-text fw-bold text-success">
-                                                👤 @Context.Session.GetString("UserName")
-                                            </span>
+                                        <li class="px-3 py-2 d-flex align-items-center">
+                                            <img src="/@Context.Session.GetString("Avatar")" alt="Avatar" class="rounded-circle me-2" width="32" height="32" />
+
+                                            <span class="fw-bold text-success">@Context.Session.GetString("UserName")</span>
                                         </li>
                                         <li><hr class="dropdown-divider" /></li>
                                         @if (Context.Session.GetString("Role") == "Admin")
@@ -79,7 +88,12 @@
                                                 <a class="dropdown-item" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">🔧 Quản trị</a>
                                             </li>
                                         }
-                                        <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">🚪 Đăng xuất</a></li>
+                                        <li>
+                                            <a class="dropdown-item"  asp-controller="OrderTracking" asp-action="Index">🔧 Đơn Hàng</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Account" asp-action="Logout">🚪 Đăng xuất</a>
+                                        </li>
                                     }
                                     else
                                     {
@@ -87,6 +101,8 @@
                                         <li><a class="dropdown-item" asp-controller="Account" asp-action="Register">📝 Đăng ký</a></li>
                                     }
                                 </ul>
+
+
                             </li>
                         </ul>
                     </div>
@@ -107,5 +123,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

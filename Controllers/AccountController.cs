@@ -14,10 +14,11 @@ namespace ShopDongY.Controllers
             _context = context;
         }
 
-        // Trang đăng ký
+        // GET: /Account/Register
         [HttpGet]
         public IActionResult Register() => View();
 
+        // POST: /Account/Register
         [HttpPost]
         public IActionResult Register(UserModel user)
         {
@@ -40,15 +41,31 @@ namespace ShopDongY.Controllers
             return RedirectToAction("Login");
         }
 
-        // Trang đăng nhập
+        // GET: /Account/Login
         [HttpGet]
-        public IActionResult Login() => View();
+        public IActionResult Login()
+        {
+            // Nếu đã đăng nhập, điều hướng phù hợp
+            if (HttpContext.Session.GetInt32("UserId") != null)
+            {
+                var role = HttpContext.Session.GetString("Role");
+                if (role == "Admin")
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
+        }
+
+        // POST: /Account/Login
         [HttpPost]
-        public IActionResult Login(string username, string password)
+        public IActionResult Login(string useremail, string password)
         {
             var user = _context.Users
                 .Include(u => u.Role)
-                .FirstOrDefault(u => u.UserName == username && u.Password == password);
+                .FirstOrDefault(u => u.Email == useremail && u.Password == password);
+
 
             if (user == null)
             {
@@ -56,27 +73,27 @@ namespace ShopDongY.Controllers
                 return View();
             }
 
+            // Lưu thông tin người dùng vào session
             HttpContext.Session.SetInt32("UserId", user.UserId);
             HttpContext.Session.SetString("UserName", user.UserName);
             HttpContext.Session.SetString("Role", user.Role.RoleName);
+            HttpContext.Session.SetString("Avatar", user.Avatar ?? "/images/default-avatar.png");
 
-            TempData["Success"] = $"Xin chào {user.UserName}";
 
-            // Phân quyền
+            TempData["Success"] = $"Xin chào {user.UserName}!";
+
             if (user.Role.RoleName == "Admin")
-                return RedirectToAction("Index", "Dashboard", new { area = "Admin" }); // Chuyển sang trang Admin
-            else
-                return RedirectToAction("Index", "Home"); // Người dùng bình thường về trang chính
+                return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+
+            return RedirectToAction("Index", "Home");
         }
 
-
+        // Đăng xuất
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-           
-
-          
-            return RedirectToAction("Login", "Account", new { area = "" });
+            TempData["Success"] = "Đăng xuất thành công.";
+            return RedirectToAction("Login");
         }
     }
 }

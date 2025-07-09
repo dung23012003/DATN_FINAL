@@ -2,7 +2,12 @@
 @{
     ViewData["Title"] = "Cửa hàng sản phẩm";
     var currentCategory = ViewBag.CurrentCategory as string;
+    var currentBrand = ViewBag.CurrentBrand as string;
     var categories = ViewBag.Categories as List<ShopDongY.Models.CategoryModel>;
+    var brands = ViewBag.Brands as List<ShopDongY.Models.BrandModel>;
+    var searchString = Context.Request.Query["searchString"];
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
 }
 
 <h2 class="text-center mb-4">Danh sách sản phẩm</h2>
@@ -13,7 +18,7 @@
         <div class="col-12 search-header mb-3">
             <div class="product-search-bar mx-auto">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Tìm sản phẩm..." id="searchInput" value="@Context.Request.Query["searchString"]" />
+                    <input type="text" class="form-control" placeholder="Tìm sản phẩm..." id="searchInput" value="@searchString" />
                     <button class="btn btn-outline-success" type="button" onclick="searchProducts()">
                         <i class="fas fa-search"></i>
                     </button>
@@ -21,21 +26,42 @@
             </div>
         </div>
 
-        <!-- Sidebar Category -->
+        <!-- Sidebar: Danh mục + Thương hiệu -->
         <div class="col-md-3 col-lg-2 sidebar">
             <div class="category-section p-3 bg-light h-100">
+                <!-- Danh mục -->
                 <h4 class="mb-3">Danh mục sản phẩm</h4>
-                <ul class="list-group h-100">
+                <ul class="list-group mb-4">
                     <li class="list-group-item @(string.IsNullOrEmpty(currentCategory) ? "active" : "")">
-                        <a href="@Url.Action("Index", "Product")" class="text-decoration-none text-dark">Tất cả</a>
+                        <a href="@Url.Action("Index", "Product", new { brand = currentBrand, searchString = searchString })"
+                           class="text-decoration-none text-dark">Tất cả</a>
                     </li>
                     @foreach (var cat in categories)
                     {
                         var isActive = currentCategory == cat.CategoryName ? "active" : "";
                         <li class="list-group-item @isActive">
-                            <a href="@Url.Action("Index", "Product", new { category = cat.CategoryName })"
+                            <a href="@Url.Action("Index", "Product", new { category = cat.CategoryName, brand = currentBrand, searchString = searchString })"
                                class="text-decoration-none text-dark">
                                 @cat.CategoryName
+                            </a>
+                        </li>
+                    }
+                </ul>
+
+                <!-- Thương hiệu -->
+                <h4 class="mb-3">Thương hiệu</h4>
+                <ul class="list-group">
+                    <li class="list-group-item @(string.IsNullOrEmpty(currentBrand) ? "active" : "")">
+                        <a href="@Url.Action("Index", "Product", new { category = currentCategory, searchString = searchString })"
+                           class="text-decoration-none text-dark">Tất cả</a>
+                    </li>
+                    @foreach (var brand in brands)
+                    {
+                        var isActive = currentBrand == brand.BrandName ? "active" : "";
+                        <li class="list-group-item @isActive">
+                            <a href="@Url.Action("Index", "Product", new { brand = brand.BrandName, category = currentCategory, searchString = searchString })"
+                               class="text-decoration-none text-dark">
+                                @brand.BrandName
                             </a>
                         </li>
                     }
@@ -53,34 +79,64 @@
             }
             else
             {
-                <div class="product-all">
+                <div class="product-all ">
                     @foreach (var product in Model)
                     {
-                        <div class="product-card">
-                            <div class="card">
+                        var quantityInStock = product.Warehouse?.QuantityInStock ?? 0;
+                        var isOutOfStock = quantityInStock <= 0;
+
+                        <div class="product-card me-3 mb-4" style="width: 250px;">
+                            <div class="card h-100">
                                 <a href="@Url.Action("Details", "Home", new { id = product.ProductId })">
-                                    <div class="image-container">
-                                        <img src="@Url.Content("~/" + product.ProductImage)" alt="@product.ProductName" />
-                                        <div class="overlay">@product.TimeAgo</div>
+                                    <div class="image-container position-relative">
+                                        <img src="@Url.Content("~/" + product.ProductImage)" alt="@product.ProductName" class="card-img-top" />
+                                        <div class="overlay ">@product.TimeAgo</div>
                                     </div>
                                 </a>
-                                <div class="card-body">
-                                    <h2 class="card-title">@product.ProductName</h2>
-                                    <div class="d-flex justify-content-between align-items-center">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">@product.ProductName</h5>
+                                    <div class="d-flex justify-content-between align-items-center mt-auto">
                                         <div class="price-product fw-bold text-danger">@product.Price.ToString("0,#") VNĐ</div>
-                                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-to-cart-form">
-                                            <input type="hidden" name="productId" value="@product.ProductId" />
-                                            <input type="hidden" name="quantity" value="1" />
-                                            <button type="submit" class="btn btn-outline-success btn-cart-icon" title="Thêm vào giỏ hàng">
-                                                <i class="fas fa-shopping-cart"></i>
+
+                                        @if (!isOutOfStock)
+                                        {
+                                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-to-cart-form">
+                                                <input type="hidden" name="productId" value="@product.ProductId" />
+                                                <input type="hidden" name="quantity" value="1" />
+                                                <button type="submit" class="btn btn-outline-success btn-cart-icon" title="Thêm vào giỏ hàng">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-outline-secondary btn-cart-icon" disabled title="Hết hàng">
+                                                <i class="fas fa-ban me-1"></i> Hết hàng
                                             </button>
-                                        </form>
+                                        }
                                     </div>
                                 </div>
                             </div>
                         </div>
                     }
                 </div>
+
+                <!-- Pagination -->
+                <nav class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        @for (int i = 1; i <= totalPages; i++)
+                        {
+                            <li class="page-item @(i == currentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", "Product", new {
+                                    page = i,
+                                    category = currentCategory,
+                                    brand = currentBrand,
+                                    searchString = searchString
+                                })">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
             }
         </div>
     </div>
@@ -92,6 +148,7 @@
             const searchTerm = document.getElementById('searchInput').value.trim();
             const url = new URL(window.location.href);
             url.searchParams.set('searchString', searchTerm);
+            url.searchParams.delete('page'); // reset về page 1 nếu có phân trang
             window.location.href = url.toString();
         }
 

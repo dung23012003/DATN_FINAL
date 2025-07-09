@@ -20,10 +20,14 @@ namespace ShopDongY.Controllers
         public IActionResult Index()
         {
             var products = _context.Products
-                .Take(10)
+                .Include(p => p.Warehouse)
+                .OrderByDescending(p => p.ProductDay) // S?p x?p m?i nh?t
+                .Take(10) // L?y 10 s?n ph?m m?i nh?t
                 .ToList();
+
             return View(products);
         }
+
 
         [HttpGet]
         public IActionResult Details(int id)
@@ -31,20 +35,26 @@ namespace ShopDongY.Controllers
             var product = _context.Products
                 .Include(p => p.Brands)
                 .Include(p => p.Categorys)
+                .Include(p => p.Warehouse) // ? Thêm dòng này
                 .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)
                 return NotFound();
 
-            // L?y danh sách s?n ph?m cùng danh m?c, lo?i tr? chính nó
             var relatedProducts = _context.Products
                 .Where(p => p.CategoryId == product.CategoryId && p.ProductId != id)
-                .Take(4) // L?y t?i ?a 4 s?n ph?m
+                .Take(4)
                 .ToList();
 
             ViewBag.RelatedProducts = relatedProducts;
 
             return View(product);
+        }
+
+        [HttpGet]
+        public IActionResult Contact()
+        {
+            return View();
         }
 
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using ShopDongY.Data;
+using ShopDongY.Models;
 
 namespace ShopDongY.Areas.Admin.Controllers
 {
@@ -22,12 +23,15 @@ namespace ShopDongY.Areas.Admin.Controllers
             ViewBag.UserCount = _context.Users.Count();
             ViewBag.OrderCount = _context.Orders.Count();
             ViewBag.BrandCount = _context.Brands.Count();
-            ViewBag.TotalRevenue = _context.Orders.Sum(o => o.TotalAmount);
+            ViewBag.TotalRevenue = _context.Orders
+                    .Where(o => o.Status == OrderModel.OrderStatus.Completed)
+                    .Sum(o => o.TotalAmount);
+
 
             // Thống kê doanh thu theo tháng trong năm hiện tại
             var currentYear = DateTime.Now.Year;
             var revenueByMonth = _context.Orders
-                .Where(o => o.OrderDate.Year == currentYear)
+                .Where(o => o.OrderDate.Year == currentYear && o.Status == OrderModel.OrderStatus.Completed)
                 .GroupBy(o => o.OrderDate.Month)
                 .Select(g => new
                 {

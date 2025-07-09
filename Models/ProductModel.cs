@@ -29,6 +29,8 @@ namespace ShopDongY.Models
 
         public virtual BrandModel? Brands { get; set; }
 
+        public virtual WarehouseModel? Warehouse { get; set; }
+
         [NotMapped]
         public string TimeAgo
         {

@@ -1,18 +1,8 @@
 wwwroot\css\default\default.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
-wwwroot\image\product_image\BG1.jpg
-wwwroot\image\product_image\Dongtrunghathao.jpg
-wwwroot\image\product_image\Gan1.jpg
-wwwroot\image\product_image\hero-img.jpg
-wwwroot\image\product_image\matong1.jpg
-wwwroot\image\product_image\Ruouxoabop.jpg
-wwwroot\image\product_image\SamDat.jpg
 wwwroot\image\product_image\SamHQ.jpg
-wwwroot\image\product_image\Screenshot 2025-05-17 220756.png
-wwwroot\image\user_image\BG1.jpg
 wwwroot\image\user_image\dung.jpg
-wwwroot\image\user_image\Screenshot 2025-05-17 220756.png
 wwwroot\js\site.js
 wwwroot\lib\bootstrap\dist\css\bootstrap.css
 wwwroot\lib\bootstrap\dist\css\bootstrap.css.map

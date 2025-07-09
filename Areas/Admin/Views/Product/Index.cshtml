@@ -13,27 +13,40 @@
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
+            <th>Id</th>
             <th>Tên sản phẩm</th>
             <th>Giá</th>
             <th>Danh mục</th>
             <th>Thương hiệu</th>
+            <th>Đã nhập</th>
+            <th>Đã bán</th>
+            <th>Tồn kho</th>
             <th style="width: 150px;">Thao tác</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
+            var warehouse = item.Warehouse;
             <tr>
+                <td>@item.ProductId</td>
+
                 <td>@item.ProductName</td>
                 <td>@item.Price.ToString("N0") ₫</td>
                 <td>@item.Categorys?.CategoryName</td>
                 <td>@item.Brands?.BrandName</td>
+                <td>@(warehouse?.TotalImported ?? 0)</td>
+                <td>@(warehouse?.TotalSold ?? 0)</td>
+                <td>@(warehouse?.QuantityInStock ?? 0)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-primary me-1">Sửa</a>
                     <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-danger"
                        onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
                         Xóa
                     </a>
+                    <a asp-area="Admin" asp-controller="Warehouse" asp-action="Create" asp-route-productId="@item.ProductId"
+                       class="btn btn-sm btn-success">Nhập Hàng</a>
+
                 </td>
             </tr>
         }

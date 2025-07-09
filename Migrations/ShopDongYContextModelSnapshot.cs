@@ -102,7 +102,6 @@ namespace ShopDongY.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
                     b.Property<string>("Note")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
@@ -120,8 +119,9 @@ namespace ShopDongY.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalAmount")
                         .HasColumnType("decimal(18,2)");
@@ -134,6 +134,38 @@ namespace ShopDongY.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ShopDongY.Models.PaymentModel", b =>
+                {
+                    b.Property<int>("PaymentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentId"));
+
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("TransferNote")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("PaymentId");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("ShopDongY.Models.ProductModel", b =>
@@ -248,6 +280,25 @@ namespace ShopDongY.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ShopDongY.Models.WarehouseModel", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TotalImported")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalSold")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId");
+
+                    b.ToTable("Warehouses");
+                });
+
             modelBuilder.Entity("ShopDongY.Models.OrderDetailsModel", b =>
                 {
                     b.HasOne("ShopDongY.Models.OrderModel", "Order")
@@ -276,6 +327,17 @@ namespace ShopDongY.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ShopDongY.Models.PaymentModel", b =>
+                {
+                    b.HasOne("ShopDongY.Models.OrderModel", "Order")
+                        .WithOne("Payment")
+                        .HasForeignKey("ShopDongY.Models.PaymentModel", "OrderId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ShopDongY.Models.ProductModel", b =>
@@ -309,6 +371,17 @@ namespace ShopDongY.Migrations
                     b.Navigation("Role");
                 });
 
+            modelBuilder.Entity("ShopDongY.Models.WarehouseModel", b =>
+                {
+                    b.HasOne("ShopDongY.Models.ProductModel", "Product")
+                        .WithOne("Warehouse")
+                        .HasForeignKey("ShopDongY.Models.WarehouseModel", "ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("ShopDongY.Models.BrandModel", b =>
                 {
                     b.Navigation("Products");
@@ -322,6 +395,13 @@ namespace ShopDongY.Migrations
             modelBuilder.Entity("ShopDongY.Models.OrderModel", b =>
                 {
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("Payment");
+                });
+
+            modelBuilder.Entity("ShopDongY.Models.ProductModel", b =>
+                {
+                    b.Navigation("Warehouse");
                 });
 
             modelBuilder.Entity("ShopDongY.Models.RoleModel", b =>

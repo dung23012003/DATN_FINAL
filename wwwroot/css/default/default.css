@@ -7,6 +7,11 @@
     list-style: none;
     box-sizing: border-box;
 }
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
 body {
     background: #eff0f5;
@@ -16,7 +21,7 @@ body {
 /* Navbar */
 .main-navbar {
     background-color: #fff;
-    padding: 12px 0;
+    padding: 15px 0;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -122,7 +127,7 @@ header {
 }
 
 .container.py-4 {
-    margin-top: 80px;
+    margin-top: 10px;
 }
 
 /* Hero Section */
@@ -225,7 +230,7 @@ header {
     display: flex;
     flex-wrap: wrap;
     gap: 0.8rem;
-    margin: 5rem auto;
+    margin: 1rem auto;
     max-width: 1200px;
     padding: 0 0.6rem;
 }
@@ -267,21 +272,7 @@ header {
             transition: transform 0.5s ease;
         }
 
-    .image-container::before {
-        content: "";
-        position: absolute;
-        top: -100%;
-        left: -100%;
-        width: 100%;
-        height: 200%;
-        background: linear-gradient(120deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.6) 50%, rgba(255, 255, 255, 0) 70%);
-        transform: rotate(25deg);
-        transition: transform 0.5s ease;
-    }
-
-    .image-container:hover::before {
-        transform: translate(150%, 150%);
-    }
+    
 
 .overlay {
     position: absolute;
@@ -325,8 +316,8 @@ header {
     max-width: 1200px;
     margin: 2rem auto;
     padding: 1rem;
-    background-color: #fff;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+    background-color: #eff0f5;
+    
 }
 
     .product-details .product-title {
@@ -481,102 +472,316 @@ header {
                 transition: 0.3s;
             }
 
-/* Footer */
-.footer {
-    background-color: #1a3c29;
-    color: #ffffff;
-    padding: 40px 0 20px;
-    margin-top: 50px;
+
+/* Vùng danh mục bên sidebar */
+.sidebar .category-section {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    background: #fff;
 }
 
-    .footer .container {
-        max-width: 1200px;
-        margin: 0 auto;
+.category-section h4 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #2a2a2a;
+}
+
+.category-section .list-group-item {
+    border: none;
+    background-color: transparent;
+    font-size: 16px;
+    padding: 10px 15px;
+    transition: all 0.2s ease-in-out;
+}
+
+    .category-section .list-group-item:hover,
+    .category-section .list-group-item.active {
+        background-color: #7cc000 !important; /* Bootstrap success color */
+        color: #fff;
+        font-weight: 500;
+        border-radius: 5px;
     }
 
-    .footer .border-bottom {
-        border-bottom: 1px solid #d4a017;
-        padding-bottom: 20px;
+    .category-section .list-group-item a {
+        display: block;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .category-section .list-group-item.active a,
+    .category-section .list-group-item:hover a {
+        color: #fff;
+    }
+    .category-section .list-group-item:hover {
+        background: none !important;
+    }
+/* Nếu bạn có thêm Brand Section thì áp dụng chung */
+.brand-section {
+    margin-top: 20px;
+}
+
+    .brand-section h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .brand-section .list-group-item {
+        font-size: 15px;
+        padding: 8px 12px;
+    }
+
+.contact-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+    .contact-wrapper h2,
+    .contact-wrapper h4 {
+        text-align: center;
         margin-bottom: 30px;
     }
 
-    .footer h1 {
-        font-size: 24px;
-        margin-bottom: 5px;
-        color: #ffd700;
+    .contact-wrapper .lead {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: #333;
     }
 
-    .footer .text-secondary {
-        color: #cccccc;
-        font-size: 14px;
-        margin-bottom: 20px;
+    .contact-wrapper img {
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 
-    .footer .btn {
-        background-color: #1a3c29;
-        color: #ffffff;
-        border: 2px solid #ffd700;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 14px;
-        text-transform: none;
-        transition: all 0.3s;
+    .contact-wrapper iframe {
+        border: none;
+        width: 100%;
+        height: 400px;
+        border-radius: 12px;
     }
 
-        .footer .btn:hover {
-            background-color: #ffd700;
-            color: #1a3c29;
-            border-color: #ffd700;
-        }
 
-    .footer .d-flex.justify-content-end .btn {
-        border: 2px solid #ffd700;
-        background-color: #2f4f4f;
-        color: #ffd700;
-        width: 35px;
-        height: 35px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 5px;
-        border-radius: 50%;
-        transition: all 0.3s;
-    }
-
-        .footer .d-flex.justify-content-end .btn:hover {
-            background-color: #ffd700;
-            color: #2f4f4f;
-        }
-
-    .footer h4 {
-        font-size: 16px;
-        margin-bottom: 15px;
-        color: #ffffff;
-    }
-
-    .footer .btn-link {
-        color: rgba(255, 255, 255, 0.5);
+/* Footer */
+/* Footer Tổng thể */
+.footer {
+    background-color: #222; /* màu nền tối */
+    color: #ccc;
+    font-size: 14px;
+    line-height: 1.7;
+}
+    .footer a {
         text-decoration: none;
-        font-size: 14px;
-        display: block;
-        margin-bottom: 10px;
-        line-height: 35px;
-        transition: color 0.3s;
+        display: inline-block;
     }
 
-        .footer .btn-link:hover {
-            color: #ffd700;
+        .footer a:hover h1,
+        .footer a:hover p {
+            color: #ffc107; /* màu vàng nổi bật khi hover */
         }
+
+    .footer h1 {
+        font-size: 28px;
+        font-weight: 700;
+        color: #ffc107; /* hoặc dùng màu xanh thảo dược: #9CCC65 */
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 0.3rem;
+    }
 
     .footer p {
         font-size: 14px;
-        margin-bottom: 5px;
+        color: #aaa;
+        font-style: italic;
+        font-weight: 400;
     }
 
-    .footer .img-fluid {
-        max-width: 100px;
-        margin-top: 10px;
+    /* Tiêu đề Footer */
+    .footer h4 {
+        color: #f8f9fa;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 1rem;
     }
+
+    /* Mô tả, đoạn text nhỏ */
+    .footer p {
+        color: #bbb;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Nút (social icon) */
+    .footer .btn-outline-secondary {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #ccc;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+        .footer .btn-outline-secondary:hover {
+            background-color: #ffc107;
+            color: #000;
+            border-color: #ffc107;
+        }
+
+    /* Liên kết */
+    .footer .btn-link {
+        padding: 0;
+        color: #ccc;
+        text-decoration: none;
+        margin-bottom: 0.3rem;
+        transition: color 0.3s ease;
+    }
+
+        .footer .btn-link:hover {
+            color: #ffc107;
+            text-decoration: underline;
+        }
+
+    /* Nút "nhiều hơn" */
+    .footer .btn.border-secondary {
+        border-color: #ffc107;
+        color: #ffc107;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .footer .btn.border-secondary:hover {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+/* Footer Item spacing */
+.footer-item {
+    padding-right: 10px;
+}
+
+/* Footer bottom border */
+.footer .pb-4 {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.footer-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px; /* thêm padding trái phải cho mobile */
+}
+
+.footer-box {
+    color: #ccc;
+}
+
+    .footer-box h4 {
+        color: #fff;
+        font-weight: 600;
+        font-size: 18px;
+    }
+    .checkout-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 32px;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+}
+
+.checkout-wrapper h2,
+.checkout-wrapper h4 {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.checkout-wrapper .form-label {
+    font-weight: 600;
+}
+
+.checkout-wrapper .form-control,
+.checkout-wrapper textarea {
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 14px;
+}
+
+.checkout-wrapper .form-control:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+}
+
+.checkout-wrapper .form-check-input {
+    cursor: pointer;
+}
+
+.checkout-wrapper .form-check-label {
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.checkout-wrapper .list-group-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.checkout-wrapper .list-group-item img {
+    object-fit: cover;
+}
+
+.checkout-wrapper .btn-success {
+    font-size: 16px;
+    padding: 10px 24px;
+    border-radius: 6px;
+}
+
+.checkout-wrapper .text-danger {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.checkout-wrapper .alert-danger {
+    font-size: 14px;
+    padding: 10px 15px;
+}
+.online-payment-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+    font-size: 15px;
+}
+
+    .online-payment-wrapper h2 {
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .online-payment-wrapper code {
+        background-color: #f9f9f9;
+        padding: 4px 8px;
+        border-radius: 5px;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .online-payment-wrapper img {
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+    }
+
+        .online-payment-wrapper img:hover {
+            transform: scale(1.05);
+        }
+
+/* Responsive fix */
+@media (max-width: 768px) {
+    .footer .d-flex.justify-content-end {
+        justify-content: center !important;
+        padding-top: 1rem;
+    }
+}
+
 
 .sidebar {
     min-width: 230px;
@@ -636,9 +841,8 @@ header {
         color: #2e7d32;
         transition: color 0.3s ease;
     }
-    .list-group-item:hover {
-        background-color: #e0f2f1;
-    }
+
+    
 @media (max-width: 768px) {
     .category-section {
         padding: 8px;

@@ -22,6 +22,7 @@ namespace ShopDongY.Areas.Admin.Controllers
             var products = await _context.Products
                 .Include(p => p.Categorys)
                 .Include(p => p.Brands)
+                .Include(p => p.Warehouse) // thêm dòng này
                 .OrderByDescending(p => p.ProductId)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

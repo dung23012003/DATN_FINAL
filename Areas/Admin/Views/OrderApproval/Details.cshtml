@@ -1,0 +1,38 @@
+﻿@model ShopDongY.Models.OrderModel
+
+<h3 class="text-primary">Chi tiết đơn hàng #@Model.OrderId</h3>
+
+<p><strong>Khách hàng:</strong> @Model.User?.UserName</p>
+<p><strong>Email:</strong> @Model.OrderEmail</p>
+<p><strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress</p>
+<p><strong>SĐT:</strong> @Model.PhoneNumber</p>
+<p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+<p><strong>Ghi chú:</strong> @Model.Note</p>
+
+<table class="table table-bordered mt-3">
+    <thead>
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderDetails)
+        {
+            <tr>
+                <td>@item.Product?.ProductName</td>
+                <td>@item.UnitPrice.ToString("N0") VNĐ</td>
+                <td>@item.Quantity</td>
+                <td>@item.TotalPrice.ToString("N0") VNĐ</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3" class="text-end fw-bold">Tổng cộng:</td>
+            <td class="fw-bold text-danger">@Model.TotalAmount.ToString("N0") VNĐ</td>
+        </tr>
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Quay lại</a>

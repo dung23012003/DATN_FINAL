@@ -13,6 +13,9 @@ namespace ShopDongY.Data
         public DbSet<UserModel> Users { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<RoleModel> Roles { get; set; }
+        public DbSet<WarehouseModel> Warehouses { get; set; }
+
+        public DbSet<PaymentModel> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -63,6 +66,26 @@ namespace ShopDongY.Data
                 .WithMany()
                 .HasForeignKey(od => od.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProductModel>()
+                .HasOne(p => p.Warehouse)
+                .WithOne(w => w.Product)
+                .HasForeignKey<WarehouseModel>(w => w.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PaymentModel>()
+                .HasOne(p => p.Order)
+                .WithOne(o => o.Payment)
+                .HasForeignKey<PaymentModel>(p => p.OrderId)
+                .OnDelete(DeleteBehavior.Restrict); // hoặc .Cascade tùy logic của bạn
+
+
+            modelBuilder
+                .Entity<OrderModel>()
+                .Property(e => e.Status)
+                .HasConversion<string>();
+
+
         }
 
 

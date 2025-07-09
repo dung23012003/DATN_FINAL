@@ -1,0 +1,108 @@
+﻿@model IEnumerable<ShopDongY.Models.OrderModel>
+
+<h2 class="text-primary">Duyệt đơn hàng</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Không có đơn hàng nào đang chờ xử lý.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Mã đơn</th>
+                <th>Khách hàng</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+                <th>Phương thức</th>
+                <th>Thanh toán</th>
+                <th>Trạng thái</th>
+
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var o in Model)
+            {
+                var isOnline = o.Payment != null;
+                <tr>
+                    <td>@o.OrderId</td>
+                    <td>@o.User?.UserName</td>
+                    <td>@o.OrderDate.ToString("dd/MM/yyyy")</td>
+                    <td>@o.TotalAmount.ToString("N0") VNĐ</td>
+                    <td>
+                        @(isOnline ? "Online" : "COD")
+                    </td>
+                    <td>
+                        @if (isOnline)
+                        {
+                            if (o.Payment.IsApproved)
+                            {
+                                <span class="badge bg-success">Đã thanh toán</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Chưa duyệt</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">Thu tiền khi giao</span>
+                        }
+                    </td>
+                    <td>
+                        @if (o.Status == ShopDongY.Models.OrderModel.OrderStatus.Pending)
+                        {
+                            <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                        }
+                        else if (o.Status == ShopDongY.Models.OrderModel.OrderStatus.Completed)
+                        {
+                            <span class="badge bg-success">Đã duyệt</span>
+                        }
+                        else if (o.Status == ShopDongY.Models.OrderModel.OrderStatus.Cancelled)
+                        {
+                            <span class="badge bg-danger">Đã hủy</span>
+                        }
+
+                    </td>
+
+                    <td>
+                        @if (o.Status == ShopDongY.Models.OrderModel.OrderStatus.Pending)
+                        {
+                            <form method="post" asp-action="Approve" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
+                                <button  class="btn btn-success btn-sm" onclick="return confirm('Xác nhận duyệt đơn hàng?')">Duyệt</button>
+                            </form>
+                            <form asp-action="Details" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
+                                <button class="btn btn-info btn-sm">Xem</button>
+                            </form>
+
+                            <form method="post" asp-action="Cancel" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
+                                <button class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận hủy đơn hàng?')">Hủy</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="Details" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
+                                <button class="btn btn-info btn-sm">Xem</button>
+                            </form>
+
+                            <span class="text-muted">Đã xử lý</span>
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>

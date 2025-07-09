@@ -61,15 +61,21 @@
                         }
                     </tbody>
                 </table>
-
                 <div class="d-flex justify-content-between mt-3">
                     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-success">
                         <i class="fas fa-shopping-cart me-1"></i> Mua thêm sản phẩm khác
                     </a>
-                    <a href="#" class="btn btn-danger">
+                    <form asp-controller="Cart" asp-action="ClearCart" method="post" class="d-inline">
+                        <button class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa toàn bộ giỏ hàng?');">
+                            <i class="fas fa-trash-alt me-1"></i> Xóa tất cả
+                        </button>
+                    </form>
+                    <a asp-controller="Cart" asp-action="Checkout" class="btn btn-danger">
                         <i class="fas fa-credit-card me-1"></i> Mua hàng
                     </a>
+
                 </div>
+
             </div>
         </div>
 

@@ -26,24 +26,42 @@
             </div>
         </div>
 
-        <!-- Sidebar: Danh mục + Thương hiệu -->
         <div class="col-md-3 col-lg-2 sidebar">
-            <div class="category-section p-3 bg-light h-100">
-                <!-- Danh mục -->
+            <div class="category-section p-3 bg-light h-100 rounded shadow-sm">
+                <!-- Danh mục sản phẩm -->
                 <h4 class="mb-3">Danh mục sản phẩm</h4>
                 <ul class="list-group mb-4">
                     <li class="list-group-item @(string.IsNullOrEmpty(currentCategory) ? "active" : "")">
                         <a href="@Url.Action("Index", "Product", new { brand = currentBrand, searchString = searchString })"
                            class="text-decoration-none text-dark">Tất cả</a>
                     </li>
-                    @foreach (var cat in categories)
+                    @for (int i = 0; i < Math.Min(5, categories.Count); i++)
                     {
+                        var cat = categories[i];
                         var isActive = currentCategory == cat.CategoryName ? "active" : "";
                         <li class="list-group-item @isActive">
                             <a href="@Url.Action("Index", "Product", new { category = cat.CategoryName, brand = currentBrand, searchString = searchString })"
-                               class="text-decoration-none text-dark">
-                                @cat.CategoryName
+                               class="text-decoration-none text-dark">@cat.CategoryName</a>
+                        </li>
+                    }
+                    @if (categories.Count > 5)
+                    {
+                        <li class="list-group-item dropdown">
+                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-h"></i> Thêm
                             </a>
+                            <ul class="dropdown-menu">
+                                @for (int i = 5; i < categories.Count; i++)
+                                {
+                                    var cat = categories[i];
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="@Url.Action("Index", "Product", new { category = cat.CategoryName, brand = currentBrand, searchString = searchString })">
+                                            @cat.CategoryName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
                         </li>
                     }
                 </ul>
@@ -55,14 +73,33 @@
                         <a href="@Url.Action("Index", "Product", new { category = currentCategory, searchString = searchString })"
                            class="text-decoration-none text-dark">Tất cả</a>
                     </li>
-                    @foreach (var brand in brands)
+                    @for (int i = 0; i < Math.Min(5, brands.Count); i++)
                     {
+                        var brand = brands[i];
                         var isActive = currentBrand == brand.BrandName ? "active" : "";
                         <li class="list-group-item @isActive">
                             <a href="@Url.Action("Index", "Product", new { brand = brand.BrandName, category = currentCategory, searchString = searchString })"
-                               class="text-decoration-none text-dark">
-                                @brand.BrandName
+                               class="text-decoration-none text-dark">@brand.BrandName</a>
+                        </li>
+                    }
+                    @if (brands.Count > 5)
+                    {
+                        <li class="list-group-item dropdown">
+                            <a href="#" class="dropdown-toggle text-dark" data-bs-toggle="dropdown">
+                                <i class="fas fa-ellipsis-h"></i> Thêm
                             </a>
+                            <ul class="dropdown-menu">
+                                @for (int i = 5; i < brands.Count; i++)
+                                {
+                                    var brand = brands[i];
+                                    <li>
+                                        <a class="dropdown-item"
+                                           href="@Url.Action("Index", "Product", new { brand = brand.BrandName, category = currentCategory, searchString = searchString })">
+                                            @brand.BrandName
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
                         </li>
                     }
                 </ul>

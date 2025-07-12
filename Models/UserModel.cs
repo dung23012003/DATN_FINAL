@@ -23,8 +23,8 @@ namespace ShopDongY.Models
 
         public DateTime CreatedAt { get; set; }
 
-        public string? Avatar { get; set; } 
-
+        public string? Avatar { get; set; }
+       
         public int? RoleId { get; set; }
         public virtual RoleModel? Role { get; set; }
     }

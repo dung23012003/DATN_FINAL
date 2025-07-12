@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\ShopDongY.0k4j5gib02.bundle.scp.css"
     },
     {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\css\\admin_css\\admin.css",
+      "PackagePath": "staticwebassets\\css\\admin_css\\admin.css"
+    },
+    {
       "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\css\\default\\default.css",
       "PackagePath": "staticwebassets\\css\\default\\default.css"
     },
@@ -17,12 +21,128 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\Dongtrunghathao.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\Dongtrunghathao.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\PhucHung1.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\PhucHung1.jpg"
+    },
+    {
       "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\SamHQ.jpg",
       "PackagePath": "staticwebassets\\image\\product_image\\SamHQ.jpg"
     },
     {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh10.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh10.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh11.webp",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh11.webp"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh3.jpg.webp",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh3.jpg.webp"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh4.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh4.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh5.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh5.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh6.webp",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh6.webp"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh7.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh7.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh8.webp",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh8.webp"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\anh9.webp",
+      "PackagePath": "staticwebassets\\image\\product_image\\anh9.webp"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\banner.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\banner.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\hero-img.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\hero-img.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\hoguom.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\hoguom.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\matong1.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\matong1.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\product_image\\traduongsinhDLC.jpg",
+      "PackagePath": "staticwebassets\\image\\product_image\\traduongsinhDLC.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\9b926c8c-2d97-4c23-87fa-7ff061a80bd9_z4601105221565_25539e3e728954f26ba088d58bc756aa.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\9b926c8c-2d97-4c23-87fa-7ff061a80bd9_z4601105221565_25539e3e728954f26ba088d58bc756aa.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\SamHQ.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\SamHQ.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\a38c1b13-24d5-4dd2-856f-42836cf5d088_z6426864212123_1c1934864df91c9991fb0f4f1a77d728.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\a38c1b13-24d5-4dd2-856f-42836cf5d088_z6426864212123_1c1934864df91c9991fb0f4f1a77d728.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\ababcb81-7dcc-4a73-8a85-1893d00a8344_dung.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\ababcb81-7dcc-4a73-8a85-1893d00a8344_dung.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\anh3.jpg.webp",
+      "PackagePath": "staticwebassets\\image\\user_image\\anh3.jpg.webp"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\anhDung.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\anhDung.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\dcd657e0-2bf9-4406-9cf9-d46594e00d51_z6428688384515_0518d6fdac3a87193ea6c255423168d2.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\dcd657e0-2bf9-4406-9cf9-d46594e00d51_z6428688384515_0518d6fdac3a87193ea6c255423168d2.jpg"
+    },
+    {
       "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\dung.jpg",
       "PackagePath": "staticwebassets\\image\\user_image\\dung.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\hoguom.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\hoguom.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\image_0.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\image_0.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\tech.png",
+      "PackagePath": "staticwebassets\\image\\user_image\\tech.png"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\z5051448207266_f8485e27520be5871483d6dbacd48769.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\z5051448207266_f8485e27520be5871483d6dbacd48769.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\z6426864212123_1c1934864df91c9991fb0f4f1a77d728.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\z6426864212123_1c1934864df91c9991fb0f4f1a77d728.jpg"
+    },
+    {
+      "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\image\\user_image\\z6426864213068_3549b7a8ec10485181f4ea71343cc8f2.jpg",
+      "PackagePath": "staticwebassets\\image\\user_image\\z6426864213068_3549b7a8ec10485181f4ea71343cc8f2.jpg"
     },
     {
       "Id": "G:\\ShopDongY\\ShopDongY\\wwwroot\\js\\site.js",

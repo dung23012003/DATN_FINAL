@@ -3,24 +3,16 @@
   "WorkspaceRootPath": "G:\\ShopDongY\\ShopDongY\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\views\\product\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:views\\product\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:views\\home\\contact.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\wwwroot\\css\\default\\default.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
-      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:wwwroot\\css\\default\\default.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|g:\\shopdongy\\shopdongy\\views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{BFD2FE82-1993-4BCC-818A-4A2D07963AE5}|ShopDongY.csproj|solutionrelative:views\\shared\\_footer.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,72 +22,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\Views\\Product\\Index.cshtml",
-              "RelativeDocumentMoniker": "Views\\Product\\Index.cshtml",
-              "ToolTip": "G:\\ShopDongY\\ShopDongY\\Views\\Product\\Index.cshtml",
-              "RelativeToolTip": "Views\\Product\\Index.cshtml",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAACIAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-09T07:52:32.048Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ProductController.cs",
-              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\Controllers\\ProductController.cs",
-              "RelativeDocumentMoniker": "Controllers\\ProductController.cs",
-              "ToolTip": "G:\\ShopDongY\\ShopDongY\\Controllers\\ProductController.cs",
-              "RelativeToolTip": "Controllers\\ProductController.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAQwBcAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "CartController.cs",
+              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\Controllers\\CartController.cs",
+              "RelativeDocumentMoniker": "Controllers\\CartController.cs",
+              "ToolTip": "G:\\ShopDongY\\ShopDongY\\Controllers\\CartController.cs",
+              "RelativeToolTip": "Controllers\\CartController.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAgwFoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-09T07:52:27.619Z",
+              "WhenOpened": "2025-07-11T01:56:35.978Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "G:\\ShopDongY\\ShopDongY\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAAD8AAABMAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "Contact.cshtml",
+              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\Views\\Home\\Contact.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\Contact.cshtml",
+              "ToolTip": "G:\\ShopDongY\\ShopDongY\\Views\\Home\\Contact.cshtml",
+              "RelativeToolTip": "Views\\Home\\Contact.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-07-09T07:41:44.043Z",
+              "WhenOpened": "2025-07-10T20:36:12.52Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
-              "ToolTip": "G:\\ShopDongY\\ShopDongY\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "Controllers\\HomeController.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAYwDgAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-09T07:40:32.369Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "default.css",
-              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\wwwroot\\css\\default\\default.css",
-              "RelativeDocumentMoniker": "wwwroot\\css\\default\\default.css",
-              "ToolTip": "G:\\ShopDongY\\ShopDongY\\wwwroot\\css\\default\\default.css",
-              "RelativeToolTip": "wwwroot\\css\\default\\default.css",
-              "ViewState": "AgIAAKgCAAAAAAAAAAAYwMgCAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-07-09T07:39:53.739Z",
-              "EditorCaption": ""
+              "Title": "_Footer.cshtml",
+              "DocumentMoniker": "G:\\ShopDongY\\ShopDongY\\Views\\Shared\\_Footer.cshtml",
+              "RelativeDocumentMoniker": "Views\\Shared\\_Footer.cshtml",
+              "ToolTip": "G:\\ShopDongY\\ShopDongY\\Views\\Shared\\_Footer.cshtml",
+              "RelativeToolTip": "Views\\Shared\\_Footer.cshtml",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAD8AAABFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-07-10T20:11:25.615Z"
             }
           ]
         }

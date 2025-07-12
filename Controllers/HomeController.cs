@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopDongY.Data;
@@ -17,16 +17,25 @@ namespace ShopDongY.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int page = 1)
         {
-            var products = _context.Products
+            int pageSize = 8;
+
+            var allProducts = _context.Products
+                .Include(p => p.Categorys)
+                .Include(p => p.Brands)
                 .Include(p => p.Warehouse)
-                .OrderByDescending(p => p.ProductDay) // S?p x?p m?i nh?t
-                .Take(10) // L?y 10 s?n ph?m m?i nh?t
-                .ToList();
+                .OrderByDescending(p => p.ProductId); // Hoặc CreatedAt nếu có
+
+            int totalProducts = allProducts.Count();
+            var products = allProducts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
 
             return View(products);
         }
+
 
 
         [HttpGet]
@@ -35,7 +44,7 @@ namespace ShopDongY.Controllers
             var product = _context.Products
                 .Include(p => p.Brands)
                 .Include(p => p.Categorys)
-                .Include(p => p.Warehouse) // ? Th�m d�ng n�y
+                .Include(p => p.Warehouse) // ? Thêm dòng này
                 .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)

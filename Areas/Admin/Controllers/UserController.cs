@@ -66,6 +66,16 @@ namespace ShopDongY.Areas.Admin.Controllers
                 LoadSelectLists();
                 return View(user);
             }
+            if (user.RoleId == null || user.RoleId == 0)
+            {
+                ModelState.AddModelError("RoleId", "Vui lòng chọn vai trò.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.RoleId = new SelectList(_context.Roles.ToList(), "RoleId", "RoleName");
+                return View(user);
+            }
 
             // Xử lý ảnh
             var file = HttpContext.Request.Form.Files["Avatar"];
@@ -124,7 +134,7 @@ namespace ShopDongY.Areas.Admin.Controllers
                 return NotFound();
 
             ViewBag.RoleId = new SelectList(_context.Roles, "RoleId", "RoleName", user.RoleId);
-            
+            TempData["Success"] = "Tạo người dùng thành công!";
             return View(user);
         }
 

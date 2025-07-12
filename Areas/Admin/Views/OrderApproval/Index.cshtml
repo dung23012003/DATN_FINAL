@@ -67,29 +67,31 @@ else
 
                     </td>
 
-                    <td>
-                        @if (o.Status == ShopDongY.Models.OrderModel.OrderStatus.Pending)
-                        {
-                            <form method="post" asp-action="Approve" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
-                                <button  class="btn btn-success btn-sm" onclick="return confirm('Xác nhận duyệt đơn hàng?')">Duyệt</button>
-                            </form>
-                            <form asp-action="Details" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
-                                <button class="btn btn-info btn-sm">Xem</button>
-                            </form>
+                    <td class="d-flex align-items-center gap-2">
+                        <form asp-action="Details" asp-route-orderId="@o.OrderId" style="margin: 0;">
+                            <button class="btn btn-info btn-sm">Xem</button>
+                        </form>
 
-                            <form method="post" asp-action="Cancel" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
-                                <button class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận hủy đơn hàng?')">Hủy</button>
+                        @if (o.Status == ShopDongY.Models.OrderModel.OrderStatus.Pending && o.Payment == null)
+                        {
+                            <form method="post" asp-action="Approve" asp-route-orderId="@o.OrderId" style="margin: 0;">
+                                <button class="btn btn-success btn-sm">Duyệt</button>
                             </form>
+                            <form method="post" asp-action="Cancel" asp-route-orderId="@o.OrderId" style="margin: 0;">
+                                <button class="btn btn-danger btn-sm">Hủy</button>
+                            </form>
+                        }
+                        else if (o.Status == ShopDongY.Models.OrderModel.OrderStatus.Pending && o.Payment != null)
+                        {
+                            <span class="text-warning">Đơn online - vui lòng duyệt ở trang thanh toán</span>
                         }
                         else
                         {
-                            <form asp-action="Details" asp-route-orderId="@o.OrderId" style="padding: 0 !important; display: inline;">
-                                <button class="btn btn-info btn-sm">Xem</button>
-                            </form>
-
-                            <span class="text-muted">Đã xử lý</span>
+                            <span class="text-success">✅ Đã xử lý</span>
                         }
                     </td>
+
+
 
                 </tr>
             }

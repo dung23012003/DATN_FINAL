@@ -1,0 +1,43 @@
+﻿@using ShopDongY.Models
+@model List<HealthNewsModel>
+
+@{
+    ViewData["Title"] = "Bản tin sức khỏe";
+}
+
+<h2 class="text-success fw-bold text-center mb-5 py-5">
+    <i class="fas fa-notes-medical me-2 "></i> Bản tin sức khỏe
+</h2>
+
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 mb-3">
+            <!-- giảm khoảng cách dưới -->
+            <div class="card h-100 border-0 shadow-sm rounded-3 overflow-hidden" style="font-size: 0.85rem;">
+                @if (!string.IsNullOrEmpty(item.ImageUrl))
+                {
+                    <img src="@item.ImageUrl" class="card-img-top" style="height: 130px; object-fit: cover;" alt="Ảnh bản tin" />
+                }
+
+                <div class="card-body d-flex flex-column p-2">
+                    <h6 class="card-title text-truncate fw-semibold mb-1" title="@item.Title">@item.Title</h6>
+                    <p class="text-muted small mb-1">
+                        <i class="fas fa-calendar-alt me-1"></i> @item.CreatedAt.ToString("dd/MM/yyyy")
+                    </p>
+
+                    <p class="card-text text-secondary mb-2">
+                        @item.Content?.Substring(0, Math.Min(60, item.Content.Length))...
+                    </p>
+
+                    <div class="mt-auto">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-success">
+                            Xem chi tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+

@@ -16,10 +16,20 @@ namespace ShopDongY.Models
         public decimal Price { get; set; }
 
         public string? ProductImage { get; set; }
+        public string? ProductImage1 { get; set; }  // Ảnh phụ 1
+        public string? ProductImage2 { get; set; }  // Ảnh phụ 2
+        public string? ProductImage3 { get; set; }  // Ảnh phụ 3
+
 
         public DateTime ProductDay { get; set; }
 
+        public string? Unit { get; set; }
+
+        public int? QuantityPerUnit { get; set; }
+
         public int Code { get; set; }
+
+        public string? UnitInfo { get; set; }
 
         public int? CategoryId { get; set; }
 
@@ -30,6 +40,13 @@ namespace ShopDongY.Models
         public virtual BrandModel? Brands { get; set; }
 
         public virtual WarehouseModel? Warehouse { get; set; }
+
+        public int Sold { get; set; }
+
+
+        public virtual ICollection<DiscountModel>? Discounts { get; set; }
+
+
 
         [NotMapped]
         public string TimeAgo
@@ -48,8 +65,9 @@ namespace ShopDongY.Models
             }
         }
 
-        // ✅ Đây là phần bạn cần để hiển thị tên danh mục
         [NotMapped]
         public string? CategoryName => Categorys?.CategoryName;
+
+        
     }
 }

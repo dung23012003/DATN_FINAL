@@ -1,0 +1,40 @@
+﻿@using ShopDongY.Models
+@model HealthNewsModel
+
+<h2 class="text-success mb-4">Chỉnh sửa bài viết</h2>
+
+<form asp-area="Admin" asp-controller="HealthNews" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Tiêu đề</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nội dung</label>
+        <textarea asp-for="Content" class="form-control" rows="8"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ảnh hiện tại</label><br />
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="~/@Model.ImageUrl" class="img-thumbnail mb-2" style="max-height: 150px;" />
+        }
+        else
+        {
+            <p class="text-muted fst-italic">Chưa có ảnh</p>
+        }
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Chọn ảnh mới (nếu muốn thay)</label>
+        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a class="btn btn-secondary" asp-action="Index">Hủy</a>
+</form>

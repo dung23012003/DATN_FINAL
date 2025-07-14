@@ -1,65 +1,93 @@
 ﻿@model List<ShopDongY.Models.ProductModel>
-
+@{
+    var topSelling = ViewBag.TopSellingProducts as List<ShopDongY.Models.ProductModel> ?? new List<ShopDongY.Models.ProductModel>();
+    var productsOnSale = ViewBag.ProductsOnSale as List<ShopDongY.Models.ProductModel>;
+    }
 <!-- Hero Section -->
-<div class="hero-section py-5">
+<div class="hero-section py-5 mt-5">
     <div class="container">
         <div class="row align-items-center banner">
-            <!-- Text Section -->
+            <!-- Cột trái -->
             <div class="col-md-6">
-                <p class="tagline text-blink-red fw-bold mb-2">100% thiên nhiên</p>
-                <h1 class="hero-title mb-1">
-                    <span class="text-shadow text-dark">Chào mừng bạn đến với</span><br />
-                    <span class="text-shadow text-green fw-bold d-flex align-items-center">
-                        <i class="fas fa-leaf me-2 text-success"></i> Cửa hàng Đông Y
+                <p class="tagline text-danger fw-bold mb-2">100% thiên nhiên</p>
+                <h1 class="hero-title mb-1 fw-bold display-6">
+                    <span>Chào mừng bạn đến với</span><br />
+                    <span class="d-flex align-items-center text-success" style="font-size: 2.5rem;">
+                        <i class="fas fa-leaf me-2"></i> Thảo mộc <span class="ms-1" style="color: #198754;">An Nhiên</span>
                     </span>
                 </h1>
-                <div class="search-bar d-flex">
-                    <input class="form-control me-2" type="text" placeholder="Tìm kiếm sản phẩm..." id="searchInput" />
-                    <button type="button" class="btn btn-success" onclick="searchProducts()">Tìm kiếm</button>
+                <div class="search-bar d-flex mt-3">
+                    <input class="form-control search-input" type="text" placeholder="Tìm kiếm sản phẩm..." id="searchInput" />
+                    <button type="button" class="btn btn-success ms-2 px-4" id="searchBtn">Tìm kiếm</button>
                 </div>
             </div>
+            <!-- Cột phải -->
+            <div class="col-md-6 mt-4 mt-md-0 ms-auto" style="max-width: 600px;">
 
+                @if (topSelling != null && topSelling.Any())
+                {
+                    <!-- Đặt dòng chữ ở đây, ngoài carousel -->
+                    <h5 class="blinking-text text-danger fw-bold text-center mb-3">
+                        🔥 Sản phẩm bán chạy
+                    </h5>
 
-            <!-- Carousel Section -->
-            <div class="col-md-6">
-                <div id="heroCarousel" class="carousel slide rounded shadow" data-bs-ride="carousel">
-                    <div class="carousel-inner rounded">
-                        <!-- Slide 1: Mật ong -->
-                        <div class="carousel-item active">
-                            <img src="~/image/product_image/matong1.jpg" class="d-block w-100 rounded" alt="Mật ong">
-                            <div class="carousel-caption d-none d-md-block">
-                                <a asp-controller="Product" asp-action="Index" asp-route-brand="Mật Ong Nguyên Chất"
-                                   class="bg-warning text-white px-3 py-1 d-inline-block rounded text-decoration-none">
-                                    <h5 class="mb-0">Mật ong</h5>
-                                </a>
-                            </div>
+                    <div id="heroCarousel" class="carousel slide rounded shadow" data-bs-ride="carousel">
+                        <div class="carousel-inner rounded">
+                            @{
+                                var index = 0;
+                            }
+                            @foreach (var product in topSelling)
+                            {
+                                <div class="carousel-item @(index == 0 ? "active" : "")">
+                                    <div class="image-box" style="
+                                            background-image: url('@Url.Content("~/" + product.ProductImage)');
+                                            height: 350px;
+                                            background-size: cover;
+                                            background-position: center;
+                                            border-radius: 12px;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            overflow: hidden;">
+                                        <img src="@Url.Content("~/" + product.ProductImage)"
+                                             alt="@product.ProductName"
+                                             class="main-img"
+                                             style="height: 100%; object-fit: contain; border-radius: 12px;" />
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <a asp-controller="Product" asp-action="Details" asp-route-id="@product.ProductId"
+                                               class="bg-warning text-white px-3 py-1 d-inline-block rounded text-decoration-none fw-bold">
+                                                @product.ProductName
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                index++;
+                            }
                         </div>
 
-                        <!-- Slide 2: Đông trùng hạ thảo -->
-                        <div class="carousel-item">
-                            <img src="~/image/product_image/Dongtrunghathao.jpg" class="d-block w-100 rounded" alt="Đông trùng hạ thảo">
-                            <div class="carousel-caption d-none d-md-block">
-                                <a asp-controller="Product" asp-action="Index" asp-route-brand="Đông Trùng Hạ Thảo"
-                                   class="bg-warning text-white px-3 py-1 d-inline-block rounded text-decoration-none">
-                                    <h5 class="mb-0">Đông trùng hạ thảo</h5>
-                                </a>
-                            </div>
-                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-success rounded-circle"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-success rounded-circle"></span>
+                        </button>
                     </div>
-
-                    <!-- Nút điều hướng -->
-                    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon bg-light rounded-circle"></span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon bg-light rounded-circle"></span>
-                    </button>
-                </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning text-center mb-0">
+                        Không có sản phẩm bán chạy nào để hiển thị.
+                    </div>
+                }
             </div>
+
+
 
         </div>
     </div>
 </div>
+
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -68,68 +96,217 @@
     </div>
 }
 
-<h2 class="product-heading mt-5 mb-4 text-center fw-bold text-blink-red">Sản phẩm mới</h2>
->
+@if (productsOnSale != null && productsOnSale.Any())
+{
+    <h2 class="text-center fw-bold text-danger mb-3 text-blink-red">⚡ Sản phẩm đang giảm giá ⚡</h2>
 
-<div class="product-all">
-    @foreach (var product in Model)
-    {
-        var quantityInStock = product.Warehouse?.QuantityInStock ?? 0;
-        var isOutOfStock = quantityInStock <= 0;
-        <div class="product-card">
-            <div class="card">
-                <a href="@Url.Action("Details", "Home", new {id = product.ProductId})">
-                    <div class="image-container">
-                        <img src="@Url.Content("~/" + product.ProductImage)" alt="@product.ProductName" />
-                        <div class="overlay">@product.TimeAgo</div>
+    <div class="discount-slider-wrapper position-relative mx-auto" style="max-width: 1040px; margin-top: 60px;">
+        <button class="discount-btn position-absolute start-0 top-50 translate-middle-y" onclick="slideDiscount(-1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div id="discountSlider" class="overflow-hidden">
+            <div id="discountSliderInner" class="d-flex gap-3 flex-nowrap">
+                @foreach (var product in productsOnSale)
+                {
+                    var discount = product.Discounts.FirstOrDefault(d =>
+                    d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
+
+                    var finalPrice = discount != null
+                    ? (discount.IsPercentage ? product.Price - (product.Price * discount.DiscountAmount / 100)
+                    : product.Price - discount.DiscountAmount)
+                    : product.Price;
+
+                    var isOutOfStock = product.Warehouse?.QuantityInStock <= 0;
+
+                    <div class="product-card">
+                        <div class="card">
+                            <a href="@Url.Action("Details", "Home", new { id = product.ProductId })">
+                                <div class="image-container">
+                                    <img src="@Url.Content("~/" + product.ProductImage)" alt="@product.ProductName" />
+                                    @if (discount != null)
+                                    {
+                                        <div class="discount-tag">
+                                            @(discount.IsPercentage ? $"-{(int)discount.DiscountAmount}%" : $"-{discount.DiscountAmount.ToString("0,#")} VNĐ")
+                                        </div>
+                                    }
+                                </div>
+                            </a>
+                            <div class="card-body">
+                                <h2 class="card-title">@product.ProductName</h2>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="price-product">
+                                        @if (discount != null)
+                                        {
+                                            <span class="text-muted text-decoration-line-through me-1">@product.Price.ToString("0,#") VNĐ</span>
+                                            <div class="text-muted small fst-italic mt-1">
+                                                Khuyến mãi đến: @discount.EndDate.ToString("dd/MM/yyyy HH:mm")
+                                            </div>
+                                            <span class="text-danger fw-bold">@finalPrice.ToString("0,#") VNĐ</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="invisible text-muted text-decoration-line-through me-1">---</span>
+                                            <div class="invisible small fst-italic mt-1">---</div>
+                                            <span class="text-danger fw-bold">@product.Price.ToString("0,#") VNĐ</span>
+                                        }
+                                    </div>
+                                    @if (!isOutOfStock)
+                                    {
+                                        <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-to-cart-form">
+                                            <input type="hidden" name="productId" value="@product.ProductId" />
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn btn-outline-success btn-cart-icon" title="Thêm vào giỏ hàng">
+                                                <i class="fas fa-shopping-cart"></i>
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-outline-secondary btn-cart-icon" disabled title="Hết hàng">
+                                            <i class="fas fa-ban me-1"></i> Hết hàng
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </a>
-                <div class="card-body">
-                    <h2 class="card-title">@product.ProductName</h2>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="price-product fw-bold text-danger">@product.Price.ToString("0,#") VNĐ</div>
-
-
-                        @if (!isOutOfStock)
-                        {
-                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-to-cart-form">
-                                <input type="hidden" name="productId" value="@product.ProductId" />
-                                <input type="hidden" name="quantity" value="1" />
-                                <button type="submit" class="btn btn-outline-success btn-cart-icon" title="Thêm vào giỏ hàng">
-                                    <i class="fas fa-shopping-cart"></i>
-                                </button>
-                            </form>
-                        }
-                        else
-                        {
-                            <button class="btn btn-outline-secondary btn-cart-icon" disabled title="Hết hàng">
-                                <i class="fas fa-ban me-1"></i> Hết hàng
-                            </button>
-                        }
-                    </div>
-
-                </div>
+                }
             </div>
         </div>
-    }
+
+        <button class="discount-btn position-absolute end-0 top-50 translate-middle-y" onclick="slideDiscount(1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+}
+<div class="d-flex justify-content-center mt-5 mb-4">
+    <h2 class="text-primary fw-bold position-relative d-inline-block" style="padding-bottom: 10px;">
+        <i class="fas fa-certificate text-danger me-2"></i>
+        <span class="text-danger fw-bold me-2">NEW</span> Sản phẩm mới
+    </h2>
 </div>
 
 
 
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info text-center">Hiện chưa có sản phẩm nào được đăng tải.</div>
+}
+else
+{
+    <div class="product-all">
+        @foreach (var product in Model)
+        {
+            var quantityInStock = product.Warehouse?.QuantityInStock ?? 0;
+            var isOutOfStock = quantityInStock <= 0;
+
+            var discount = product.Discounts?.FirstOrDefault(d =>
+            d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
+
+            decimal finalPrice = product.Price;
+            if (discount != null)
+            {
+                finalPrice = discount.IsPercentage
+                ? product.Price - (product.Price * discount.DiscountAmount / 100)
+                : product.Price - discount.DiscountAmount;
+            }
+
+            <div class="product-card">
+                <div class="card">
+                    <a href="@Url.Action("Details", "Home", new { id = product.ProductId })">
+                        <div class="image-container">
+                            <img src="@Url.Content("~/" + product.ProductImage)" alt="@product.ProductName" />
+                            @if (discount != null)
+                            {
+                                <div class="discount-tag">
+                                    @(discount.IsPercentage ? $"-{(int)discount.DiscountAmount}%" : $"-{discount.DiscountAmount.ToString("0,#")} VNĐ")
+                                </div>
+                            }
+                            <div class="overlay">@product.TimeAgo</div>
+                        </div>
+                    </a>
+                    <div class="card-body">
+                        <h2 class="card-title">@product.ProductName</h2>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="price-product">
+                                @if (discount != null)
+                                {
+                                    <span class="text-muted text-decoration-line-through me-1 d-block">@product.Price.ToString("0,#") VNĐ</span>
+                                    <div class="text-muted small fst-italic mt-1 d-block">
+                                        Khuyến mãi đến: @discount.EndDate.ToString("dd/MM/yyyy HH:mm")
+                                    </div>
+                                    <span class="text-danger fw-bold d-block">@finalPrice.ToString("0,#") VNĐ</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted text-decoration-line-through me-1 d-block invisible">--</span>
+                                    <div class="text-muted small fst-italic mt-1 d-block invisible">--</div>
+                                    <span class="text-danger fw-bold d-block">@product.Price.ToString("0,#") VNĐ</span>
+                                }
+                            </div>
+                            @if (!isOutOfStock)
+                            {
+                                <form asp-controller="Cart" asp-action="AddToCart" method="post" class="add-to-cart-form">
+                                    <input type="hidden" name="productId" value="@product.ProductId" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn btn-outline-success btn-cart-icon" title="Thêm vào giỏ hàng">
+                                        <i class="fas fa-shopping-cart"></i>
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <button class="btn btn-outline-secondary btn-cart-icon" disabled title="Hết hàng">
+                                    <i class="fas fa-ban me-1"></i> Hết hàng
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
 @section Scripts {
     <script>
-        function searchProducts() {
-            var searchTerm = document.getElementById('searchInput').value.trim();
-            if (searchTerm !== '') {
-                window.location.href = '@Url.Action("Index", "Product")?searchString=' + encodeURIComponent(searchTerm);
-            }
-        }
+        (function () {
+            const input = document.getElementById('searchInput');
+            const btn = document.getElementById('searchBtn');
 
-        document.getElementById('searchInput')?.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                searchProducts();
+            function searchProducts() {
+                const searchTerm = input?.value.trim();
+                if (searchTerm) {
+                    window.location.href = '@Url.Action("Index", "Product")?searchString=' + encodeURIComponent(searchTerm);
+                }
             }
-        });
+
+            input?.addEventListener('keypress', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchProducts();
+                }
+            });
+
+            btn?.addEventListener('click', searchProducts);
+        })();
+
+        let currentSlide = 0;
+        const itemsPerView = 4;
+        const itemWidth = 260;
+        const slider = document.getElementById("discountSliderInner");
+
+        function slideDiscount(direction) {
+            const totalItems = slider.children.length;
+            const maxSlide = totalItems - itemsPerView;
+            currentSlide += direction;
+
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide > maxSlide) currentSlide = maxSlide;
+
+            const offset = -currentSlide * itemWidth;
+            slider.style.transform = `translateX(${offset}px)`;
+        }
     </script>
 }

@@ -14,53 +14,49 @@ namespace ShopDongY.Data
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<RoleModel> Roles { get; set; }
         public DbSet<WarehouseModel> Warehouses { get; set; }
+        public DbSet<DiscountModel> Discounts { get; set; }
+        public DbSet<HealthNewsModel> HealthNews { get; set; }
+
 
         public DbSet<PaymentModel> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // 🔹 Product - Category (N:1)
             modelBuilder.Entity<ProductModel>()
                 .HasOne(p => p.Categorys)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 🔹 Product - Brand (N:1)
             modelBuilder.Entity<ProductModel>()
                 .HasOne(p => p.Brands)
                 .WithMany()
                 .HasForeignKey(p => p.BrandId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 🔹 Product: unique Code
             modelBuilder.Entity<ProductModel>()
                 .HasIndex(p => p.Code)
                 .IsUnique();
 
-            // 🔹 User - Role (N:1)
             modelBuilder.Entity<UserModel>()
                 .HasOne(u => u.Role)
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 🔹 Order - User (N:1)
             modelBuilder.Entity<OrderModel>()
                 .HasOne(o => o.User)
                 .WithMany()
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 🔹 OrderDetail - Order (N:1)
             modelBuilder.Entity<OrderDetailsModel>()
                 .HasOne(od => od.Order)
                 .WithMany(o => o.OrderDetails)
                 .HasForeignKey(od => od.OrderId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // 🔹 OrderDetail - Product (N:1)
             modelBuilder.Entity<OrderDetailsModel>()
                 .HasOne(od => od.Product)
                 .WithMany()
@@ -77,18 +73,22 @@ namespace ShopDongY.Data
                 .HasOne(p => p.Order)
                 .WithOne(o => o.Payment)
                 .HasForeignKey<PaymentModel>(p => p.OrderId)
-                .OnDelete(DeleteBehavior.Restrict); // hoặc .Cascade tùy logic của bạn
+                .OnDelete(DeleteBehavior.Restrict);
 
-
-            modelBuilder
-                .Entity<OrderModel>()
+            modelBuilder.Entity<OrderModel>()
                 .Property(e => e.Status)
                 .HasConversion<string>();
 
+            modelBuilder.Entity<ProductModel>()
+
+             .HasMany(p => p.Discounts) // ✅ đúng với định nghĩa ICollection
+            .WithOne(d => d.Product)   // Giả sử DiscountModel có thuộc tính Product
+            .HasForeignKey(d => d.ProductId);
+
+
+        
 
         }
-
-
 
     }
 }

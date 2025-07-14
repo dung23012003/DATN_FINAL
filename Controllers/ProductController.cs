@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShopDongY.Data;
 
@@ -29,11 +30,21 @@ namespace ShopDongY.Controllers
             ViewBag.CurrentBrand = brand;
             ViewBag.CurrentSearch = searchString;
 
+
+            ViewBag.UnitOptions = new List<SelectListItem>
+             {
+                    new SelectListItem { Text = "Viên", Value = "Viên" },
+                    new SelectListItem { Text = "ml", Value = "ml" },
+                   
+                };
+
+
             // Truy vấn danh sách sản phẩm
             var productsQuery = _context.Products
                 .Include(p => p.Categorys)
                 .Include(p => p.Brands)
                 .Include(p => p.Warehouse)
+                  .Include(p => p.Discounts)
                 .AsQueryable();
 
             // Lọc theo danh mục nếu có
@@ -75,6 +86,49 @@ namespace ShopDongY.Controllers
             ViewBag.TotalPages = totalPages;
 
             return View(products);
+        }
+        [HttpGet]
+        public IActionResult Details(int id)
+        {
+            var product = _context.Products
+                .Include(p => p.Categorys)
+                .Include(p => p.Brands)
+                .FirstOrDefault(p => p.ProductId == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Gợi ý sản phẩm cùng danh mục
+            var relatedProducts = _context.Products
+                .Where(p => p.CategoryId == product.CategoryId && p.ProductId != id)
+                .OrderByDescending(p => p.ProductId)
+                .Take(4)
+                .ToList();
+
+            ViewBag.RelatedProducts = relatedProducts;
+
+            return View(product);
+        }
+
+        // Hàm phụ để hiển thị "cách đây bao lâu"
+        private string GetTimeAgo(DateTime? dateTime)
+        {
+            if (dateTime == null) return "";
+
+            var timeSpan = DateTime.Now - dateTime.Value;
+
+            if (timeSpan.TotalMinutes < 1)
+                return "Vừa xong";
+            else if (timeSpan.TotalMinutes < 60)
+                return $"{(int)timeSpan.TotalMinutes} phút trước";
+            else if (timeSpan.TotalHours < 24)
+                return $"{(int)timeSpan.TotalHours} giờ trước";
+            else if (timeSpan.TotalDays < 7)
+                return $"{(int)timeSpan.TotalDays} ngày trước";
+            else
+                return dateTime.Value.ToString("dd/MM/yyyy");
         }
 
 

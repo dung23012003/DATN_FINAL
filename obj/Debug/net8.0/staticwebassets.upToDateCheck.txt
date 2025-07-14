@@ -2,6 +2,24 @@ wwwroot\css\admin_css\admin.css
 wwwroot\css\default\default.css
 wwwroot\css\site.css
 wwwroot\favicon.ico
+wwwroot\image\news\140ecf3d-146f-462c-bd43-43191ac87241.jpg
+wwwroot\image\news\23bb3173-8b5a-48b2-a808-d5a67ba1d7a1.webp
+wwwroot\image\news\3255a60a-277e-442c-8a97-bdbde0b9b3d0.jpg
+wwwroot\image\news\43d78da9-d204-4fd8-8228-f0ca68909aad.webp
+wwwroot\image\news\5b39eec7-1ae8-4fec-b429-30525686d8ea.webp
+wwwroot\image\news\90b0fa14-6b63-4b03-a03b-ff1e7bdbc9be.jpg
+wwwroot\image\news\b20f5d24-80e4-4c36-a454-3e0ed9611417.webp
+wwwroot\image\news\eb8135c7-4e92-4749-80c1-655b74a29097.webp
+wwwroot\image\product\anh11.webp
+wwwroot\image\product\anh6.webp
+wwwroot\image\product\matong1.jpg
+wwwroot\image\product\OIP (1).webp
+wwwroot\image\product\OIP (4).webp
+wwwroot\image\product\OIP (5).webp
+wwwroot\image\product\OIP.jpg
+wwwroot\image\product\SamHQ.jpg
+wwwroot\image\product\tech.png
+wwwroot\image\product\traduongsinhDLC.jpg
 wwwroot\image\product_image\anh10.jpg
 wwwroot\image\product_image\anh11.webp
 wwwroot\image\product_image\anh3.jpg.webp
@@ -12,13 +30,27 @@ wwwroot\image\product_image\anh7.jpg
 wwwroot\image\product_image\anh8.webp
 wwwroot\image\product_image\anh9.webp
 wwwroot\image\product_image\banner.jpg
+wwwroot\image\product_image\chitiet.png
+wwwroot\image\product_image\Đăng ký.png
+wwwroot\image\product_image\đăng nhập.png
 wwwroot\image\product_image\Dongtrunghathao.jpg
+wwwroot\image\product_image\duyetonline.png
 wwwroot\image\product_image\hero-img.jpg
 wwwroot\image\product_image\hoguom.jpg
 wwwroot\image\product_image\matong1.jpg
+wwwroot\image\product_image\nguoidung.png
 wwwroot\image\product_image\PhucHung1.jpg
 wwwroot\image\product_image\SamHQ.jpg
+wwwroot\image\product_image\Screenshot 2025-06-12 013640.png
+wwwroot\image\product_image\Screenshot 2025-06-12 013716.png
+wwwroot\image\product_image\Screenshot 2025-06-12 013747.png
+wwwroot\image\product_image\Screenshot 2025-07-11 033259.png
+wwwroot\image\product_image\Screenshot 2025-07-11 162311.png
+wwwroot\image\product_image\Screenshot 2025-07-11 162502.png
+wwwroot\image\product_image\Screenshot 2025-07-11 184821.png
+wwwroot\image\product_image\tech.png
 wwwroot\image\product_image\traduongsinhDLC.jpg
+wwwroot\image\product_image\z5051448207266_f8485e27520be5871483d6dbacd48769.jpg
 wwwroot\image\user_image\9b926c8c-2d97-4c23-87fa-7ff061a80bd9_z4601105221565_25539e3e728954f26ba088d58bc756aa.jpg
 wwwroot\image\user_image\a38c1b13-24d5-4dd2-856f-42836cf5d088_z6426864212123_1c1934864df91c9991fb0f4f1a77d728.jpg
 wwwroot\image\user_image\ababcb81-7dcc-4a73-8a85-1893d00a8344_dung.jpg

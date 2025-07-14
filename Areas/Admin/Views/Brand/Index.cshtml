@@ -1,45 +1,56 @@
 ﻿@model IEnumerable<ShopDongY.Models.BrandModel>
 
 @{
-    ViewData["Title"] = "Quản lý thương hiệu";
+    ViewData["Title"] = "🏷️ Quản lý thương hiệu";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int currentPage = ViewBag.CurrentPage ?? 1;
 }
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-success">🏷️ Danh sách thương hiệu</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus-circle me-1"></i> Thêm mới
+    </a>
+</div>
 
-<a asp-action="Create" class="btn btn-success mb-3">Thêm Mới</a>
-<table class="table table-bordered">
-    <thead>
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark text-center">
         <tr>
-            <th>Tên thương hiệu</th>
-            <th>Hành Động</th>
+            <th>📛 Tên thương hiệu</th>
+            <th style="width: 160px;">⚙️ Hành động</th>
         </tr>
     </thead>
     <tbody>
-    <tbody>
-            @foreach (var user in Model)
-            {
+        @foreach (var brand in Model)
+        {
             <tr>
-                <td>@user.BrandName</td>
-                <td class="text-end">
-                    <a asp-action="Edit" asp-route-id="@user.BrandId" class="btn btn-primary btn-sm">Sửa</a>
-                    <a asp-action="Delete" asp-route-id="@user.BrandId" class="btn btn-danger btn-sm ms-1">Xoá</a>
+                <td>@brand.BrandName</td>
+                <td class="text-center text-nowrap">
+                    <a asp-action="Edit" asp-route-id="@brand.BrandId" class="btn btn-sm btn-warning me-1" title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@brand.BrandId" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa thương hiệu này?');" title="Xóa">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
                 </td>
             </tr>
-            }
-    </tbody>
-
+        }
     </tbody>
 </table>
 
 <!-- Phân trang -->
-<div class="text-center">
-    <ul class="pagination justify-content-center">
-        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
-        {
-            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
-            </li>
-        }
-    </ul>
-</div>
+@if (totalPages > 1)
+{
+    <nav class="d-flex justify-content-center mt-4" aria-label="Pagination">
+        <ul class="pagination">
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

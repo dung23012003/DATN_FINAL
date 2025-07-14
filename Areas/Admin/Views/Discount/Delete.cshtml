@@ -1,0 +1,29 @@
+﻿@model ShopDongY.Models.DiscountModel
+
+@{
+    ViewData["Title"] = "Xóa giảm giá";
+}
+
+<h2 class="text-danger">Xác nhận xóa</h2>
+
+<h4>Bạn có chắc chắn muốn xóa giảm giá này?</h4>
+<hr />
+
+<div class="mb-3">
+    <strong>Tên:</strong> @Model.DiscountName
+</div>
+<div class="mb-3">
+    <strong>Sản phẩm:</strong> @Model.Product?.ProductName
+</div>
+<div class="mb-3">
+    <strong>Giảm:</strong> @(Model.IsPercentage ? $"{Model.DiscountAmount}%" : $"{Model.DiscountAmount:N0} VNĐ")
+</div>
+<div class="mb-3">
+    <strong>Thời gian:</strong> @Model.StartDate.ToString("dd/MM/yyyy") - @Model.EndDate.ToString("dd/MM/yyyy")
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="DiscountId" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+</form>

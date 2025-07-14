@@ -1,0 +1,54 @@
+﻿@model ShopDongY.Models.DiscountModel
+
+@{
+    ViewData["Title"] = "Cập nhật giảm giá";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="DiscountId" />
+
+    <div class="mb-3">
+        <label asp-for="DiscountName" class="form-label">Tên sự kiện giảm giá </label>
+        <input asp-for="DiscountName" class="form-control" />
+        <span asp-validation-for="DiscountName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DiscountAmount" class="form-label"></label>
+        <input asp-for="DiscountAmount" class="form-control" />
+        <span asp-validation-for="DiscountAmount" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="IsPercentage" class="form-check-input" />
+        <label asp-for="IsPercentage" class="form-check-label">Giảm theo phần trăm</label>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StartDate" class="form-label"></label>
+        <input asp-for="StartDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndDate" class="form-label"></label>
+        <input asp-for="EndDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ProductId" class="form-label">Sản phẩm áp dụng</label>
+        <select asp-for="ProductId" class="form-control" asp-items="ViewBag.Products"></select>
+        <span asp-validation-for="ProductId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>

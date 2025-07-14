@@ -28,20 +28,33 @@ namespace ShopDongY.Controllers
         [HttpPost]
         public IActionResult Register(UserModel user)
         {
+            // Kiểm tra model hợp lệ
             if (!ModelState.IsValid)
                 return View(user);
 
+            // Kiểm tra trùng tên đăng nhập
             if (_context.Users.Any(u => u.UserName == user.UserName))
             {
-                ModelState.AddModelError("UserName", "Tên đăng nhập đã tồn tại.");
+                ModelState.AddModelError(nameof(user.UserName), "Tên đăng nhập đã tồn tại.");
                 return View(user);
             }
-            if (Request.Form["ConfirmPassword"] != user.Password)
+
+            // Kiểm tra trùng email
+            if (_context.Users.Any(u => u.Email == user.Email))
+            {
+                ModelState.AddModelError(nameof(user.Email), "Email đã được sử dụng.");
+                return View(user);
+            }
+
+            // Kiểm tra mật khẩu nhập lại
+            var confirmPassword = Request.Form["ConfirmPassword"];
+            if (user.Password != confirmPassword)
             {
                 ModelState.AddModelError("Password", "Mật khẩu không khớp.");
-
                 return View(user);
             }
+
+            // Thiết lập các giá trị mặc định
             user.CreatedAt = DateTime.Now;
             user.RoleId = _context.Roles.FirstOrDefault(r => r.RoleName == "User")?.RoleId ?? 2;
 
@@ -51,6 +64,7 @@ namespace ShopDongY.Controllers
             TempData["Success"] = "Đăng ký thành công! Vui lòng đăng nhập.";
             return RedirectToAction("Login");
         }
+
 
         // GET: /Account/Login
         [HttpGet]
@@ -78,7 +92,7 @@ namespace ShopDongY.Controllers
 
             if (user == null || user.Role == null)
             {
-                ViewBag.Error = "Sai tên đăng nhập hoặc mật khẩu.";
+                ViewBag.Error = "Tài khoản hoặc mật khẩu không đúng!";
                 return View();
             }
 

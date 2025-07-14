@@ -1,155 +1,221 @@
-﻿
-@{
-    ViewData["Title"] = "Bảng Điều Khiển";
-    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-}
-
-<div class="container-fluid px-4">
-    
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Dashboard</li>
-    </ol>
-
-    <!-- Cards Row -->
-    <div class="row">
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-primary text-white mb-4">
-            <div class="card-body">
-                <h5 class="mb-0">Sản phẩm</h5>
-                <h3>@ViewBag.ProductCount</h3>
-            </div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Chi tiết</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-warning text-white mb-4">
-            <div class="card-body">
-                <h5 class="mb-0">Đơn hàng</h5>
-                <h3>@ViewBag.OrderCount</h3>
-            </div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" asp-area="Admin" asp-controller="OrderApproval" asp-action="Index">Chi tiết</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xl-3 col-md-6">
-        <div class="card bg-success text-white mb-4">
-            <div class="card-body">
-                <h5 class="mb-0">Người dùng</h5>
-                <h3>@ViewBag.UserCount</h3>
-            </div>
-            <div class="card-footer d-flex align-items-center justify-content-between">
-                <a class="small text-white stretched-link" asp-area="Admin" asp-controller="User" asp-action="Index">Chi tiết</a>
-                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-            </div>
-        </div>
-    </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card bg-danger text-white mb-4">
-                <div class="card-body">
-                    <h5 class="mb-0">Thương hiệu</h5>
-                    <h3>@ViewBag.BrandCount</h3>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Brand" asp-action="Index">Chi tiết</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="card bg-revenue mb-4 w-100 shadow-sm border-0">
-            <div class="card text-white bg-info mb-4 w-100 shadow-sm border-0">
-                <div class="card-body text-center">
-                    <h5 class="mb-2">💰 Tổng doanh thu</h5>
-                    <h3 class="fw-bold">
-                        @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} VNĐ", ViewBag.TotalRevenue)
-                    </h3>
-                </div>
-                <div class="card-footer d-flex align-items-center justify-content-between bg-dark bg-opacity-10 border-top-0">
-                    <a class="small text-white stretched-link" asp-area="Admin" asp-controller="OrderApproval" asp-action="Index">Chi tiết</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-</div>
-
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-line me-1"></i> Biểu đồ doanh thu theo tháng
-                </div>
-                <div class="card-body">
-                    <canvas id="barChart2" width="100%" height="40"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-bar me-1"></i> Biểu đồ sản phẩm theo thương hiệu
-                </div>
-                <div class="card-body">
-                    <canvas id="barChart1" width="100%" height="40"></canvas>
-                </div>
-            </div>
-        </div>
-
-       
-    </div>
-
-    @section Scripts {
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script>
-            // Biểu đồ sản phẩm theo thương hiệu
-            const ctx1 = document.getElementById('barChart1');
-            const barChart1 = new Chart(ctx1, {
-                type: 'bar',
-                data: {
-                    labels: [@Html.Raw(ViewBag.BrandLabels)],
-                    datasets: [{
-                        label: 'Số sản phẩm',
-                        data: [@ViewBag.BrandCounts],
-                        backgroundColor: '#4e73df'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
-            // Biểu đồ doanh thu theo tháng (dạng cột)
-            const ctx2 = document.getElementById('barChart2');
-            const barChart2 = new Chart(ctx2, {
-                type: 'bar', // <-- Đổi từ 'line' sang 'bar'
-                data: {
-                    labels: [@Html.Raw(ViewBag.Months)],
-                    datasets: [{
-                        label: 'Doanh thu (VNĐ)',
-                        data: [@ViewBag.Revenues],
-                        backgroundColor: '#e74a3b'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        </script>
+﻿    @{
+        ViewData["Title"] = "Bảng điều khiển";
+        Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
     }
+
+
+    
+        <!-- Cards -->
+        <div class="row">
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-primary text-white mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5><i class="fas fa-box me-2"></i> Sản phẩm</h5>
+                        <h3>@ViewBag.ProductCount</h3>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Chi tiết</a>
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-warning text-white mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5><i class="fas fa-file-invoice me-2"></i> Đơn hàng</h5>
+                        <h3>@ViewBag.OrderCount</h3>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <a class="small text-white stretched-link" asp-area="Admin" asp-controller="OrderApproval" asp-action="Index">Chi tiết</a>
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-success text-white mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5><i class="fas fa-users me-2"></i> Người dùng</h5>
+                        <h3>@ViewBag.UserCount</h3>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <a class="small text-white stretched-link" asp-area="Admin" asp-controller="User" asp-action="Index">Chi tiết</a>
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6">
+                <div class="card bg-danger text-white mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5><i class="fas fa-tags me-2"></i> Thương hiệu</h5>
+                        <h3>@ViewBag.BrandCount</h3>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between align-items-center">
+                        <a class="small text-white stretched-link" asp-area="Admin" asp-controller="Brand" asp-action="Index">Chi tiết</a>
+                        <i class="fas fa-angle-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doanh thu -->
+        <div class="card bg-info text-white mb-4 shadow-sm border-0">
+            <div class="card-body text-center">
+                <h5 class="mb-2"><i class="fas fa-coins me-2"></i> Tổng doanh thu</h5>
+                <h3 class="fw-bold">
+                    @string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} VNĐ", ViewBag.TotalRevenue)
+                </h3>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center bg-dark bg-opacity-10 border-top-0">
+                <a class="small text-white stretched-link" asp-area="Admin" asp-controller="OrderApproval" asp-action="Index">Xem chi tiết</a>
+                <i class="fas fa-angle-right"></i>
+            </div>
+        </div>
+
+        <!-- Charts -->
+    <div class="row equal-height">
+                <div class="col-xl-6">
+                    <div class="card mb-4 dashboard-chart-card">
+                        <div class="card-header chart-revenue">
+                            <i class="fas fa-chart-line me-2"></i> Doanh thu theo tháng
+                        </div>
+                        <div class="card-body">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-6">
+                    <div class="card mb-4 dashboard-chart-card">
+                        <div class="card-header chart-top-product">
+                            <i class="fas fa-crown me-2"></i> Top 5 sản phẩm bán chạy
+                        </div>
+                        <div class="card-body">
+                            <canvas id="topProductChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+    </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // === CẤU HÌNH MÀU CHUNG ===
+        const colors = {
+            green: '#81c784',
+            greenDark: '#2e7d32',
+            brown: '#8d6e63',
+            cream: '#f5f5dc',
+            red: '#e57373',
+            blue: '#64b5f6'
+        };
+
+        // === Biểu đồ Top 5 sản phẩm bán chạy (DOUGHNUT) ===
+               // === Biểu đồ Top 5 sản phẩm bán chạy (DOUGHNUT) ===
+        const topProductCtx = document.getElementById('topProductChart');
+        const topProductChart = new Chart(topProductCtx, {
+            type: 'doughnut',
+            data: {
+                labels: [@Html.Raw(ViewBag.TopProductLabels)],
+                datasets: [{
+                    label: 'Số lượng đã bán',
+                    data: [@ViewBag.TopProductCounts],
+                    backgroundColor: [
+                        '#28a745', '#20c997', '#17a2b8', '#ffc107', '#fd7e14'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2,
+                    hoverOffset: 20
+                }]
+            },
+            options: {
+                onClick: function () {
+                    window.location.href = '/Admin/Product/TopSelling';
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        onHover: function (event, legendItem, legend) {
+                            const index = legendItem.index;
+                            const chart = legend.chart;
+                            chart.setActiveElements([{ datasetIndex: 0, index }]);
+                            chart.update();
+                        },
+                        onLeave: function (event, legendItem, legend) {
+                            const chart = legend.chart;
+                            chart.setActiveElements([]);
+                            chart.update();
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.chart._metasets[0].total || context.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(1);
+                                return `${label}: ${value} sản phẩm (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // === Biểu đồ Doanh thu theo tháng (BAR) ===
+                const revenueCtx = document.getElementById('revenueChart');
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(ViewBag.Months)],
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: [@ViewBag.Revenues],
+                    backgroundColor: '#dc3545', // Màu đỏ tươi
+                    borderColor: '#bd2130',     // Đỏ đậm viền
+                    borderWidth: 1,
+                    hoverBackgroundColor: '#e55353', // Đỏ sáng khi hover
+                    hoverBorderColor: '#bd2130',
+                    borderRadius: 6, // Bo góc cột cho đẹp
+                    barThickness: 35 // Độ rộng cột
+                }]
+            },
+            options: {
+                onClick: function () {
+                    window.location.href = '/Admin/OrderApproval/RevenueByMonth';
+                },
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (value) {
+                                return value.toLocaleString('vi-VN') + ' ₫';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                const value = context.parsed.y;
+                                return value.toLocaleString('vi-VN') + ' ₫';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+    </script>
+}

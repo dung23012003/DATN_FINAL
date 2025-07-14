@@ -18,17 +18,18 @@ namespace ShopDongY.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            // Tổng số lượng thống kê
+            // Thống kê tổng quan
             ViewBag.ProductCount = _context.Products.Count();
             ViewBag.UserCount = _context.Users.Count();
             ViewBag.OrderCount = _context.Orders.Count();
             ViewBag.BrandCount = _context.Brands.Count();
+
+            // Tổng doanh thu của đơn đã hoàn thành
             ViewBag.TotalRevenue = _context.Orders
-                    .Where(o => o.Status == OrderModel.OrderStatus.Completed)
-                    .Sum(o => o.TotalAmount);
+                .Where(o => o.Status == OrderModel.OrderStatus.Completed)
+                .Sum(o => o.TotalAmount);
 
-
-            // Thống kê doanh thu theo tháng trong năm hiện tại
+            // 🟧 Doanh thu theo tháng trong năm hiện tại
             var currentYear = DateTime.Now.Year;
             var revenueByMonth = _context.Orders
                 .Where(o => o.OrderDate.Year == currentYear && o.Status == OrderModel.OrderStatus.Completed)
@@ -40,7 +41,6 @@ namespace ShopDongY.Areas.Admin.Controllers
                 })
                 .ToList();
 
-            // Gán doanh thu vào 12 tháng
             var months = Enumerable.Range(1, 12).Select(m =>
             {
                 var data = revenueByMonth.FirstOrDefault(x => x.Month == m);
@@ -50,18 +50,21 @@ namespace ShopDongY.Areas.Admin.Controllers
             ViewBag.Months = string.Join(",", Enumerable.Range(1, 12).Select(m => $"\"Tháng {m}\""));
             ViewBag.Revenues = string.Join(",", months);
 
-            // 🟦 Thống kê sản phẩm theo thương hiệu
-            var productByBrand = _context.Products
-                .GroupBy(p => p.Brands.BrandName)
+            // 🟦 Top 5 sản phẩm bán chạy nhất
+            var topProducts = _context.OrderDetails
+                .Include(od => od.Product)
+                .GroupBy(od => od.Product.ProductName)
                 .Select(g => new
                 {
-                    Brand = g.Key,
-                    Count = g.Count()
+                    ProductName = g.Key,
+                    TotalSold = g.Sum(x => x.Quantity)
                 })
-                .ToList(); // ❗ cũng dùng ToList ở đây
+                .OrderByDescending(x => x.TotalSold)
+                .Take(5)
+                .ToList();
 
-            ViewBag.BrandLabels = string.Join(",", productByBrand.Select(b => $"\"{b.Brand}\""));
-            ViewBag.BrandCounts = string.Join(",", productByBrand.Select(b => b.Count));
+            ViewBag.TopProductLabels = string.Join(",", topProducts.Select(p => $"\"{p.ProductName}\""));
+            ViewBag.TopProductCounts = string.Join(",", topProducts.Select(p => p.TotalSold));
 
             return View();
         }

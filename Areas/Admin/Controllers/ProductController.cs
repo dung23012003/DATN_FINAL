@@ -10,19 +10,85 @@ namespace ShopDongY.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly ShopDongYContext _context;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public ProductController(ShopDongYContext context)
+        public ProductController(ShopDongYContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostEnvironment = hostEnvironment;
         }
+        public IActionResult TopSelling()
+        {
+            var topSelling = _context.OrderDetails
+                .Include(od => od.Product)
+                .GroupBy(od => od.Product.ProductName)
+                .Select(g => new
+                {
+                    ProductName = g.Key,
+                    TotalSold = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(x => x.TotalSold)
+                .Take(10)
+                .ToList();
+
+            ViewBag.TopSellingList = topSelling;
+
+            return View();
+        }
+        private void LoadUnitOptions()
+        {
+            ViewBag.UnitOptions = new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Viên", Value = "Viên" },
+                new SelectListItem { Text = "ml", Value = "ml" },
+            };
+        }
+
+        private void LoadDropdowns(object? selectedBrand = null, object? selectedCategory = null)
+        {
+            ViewBag.BrandId = new SelectList(_context.Brands, "BrandId", "BrandName", selectedBrand);
+            ViewBag.CategoryId = new SelectList(_context.Categories, "CategoryId", "CategoryName", selectedCategory);
+        }
+
+        private async Task<string> SaveImage(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            var uploadsFolder = Path.Combine(_hostEnvironment.WebRootPath, "image/product");
+            Directory.CreateDirectory(uploadsFolder);
+
+            var fileName = Path.GetFileName(file.FileName);
+            var filePath = Path.Combine(uploadsFolder, fileName);
+
+            if (System.IO.File.Exists(filePath))
+                throw new Exception("Ảnh đã tồn tại.");
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            return "image/product/" + fileName;
+        }
+
+        private void DeleteImageFile(string? imagePath)
+        {
+            if (string.IsNullOrEmpty(imagePath)) return;
+
+            var fullPath = Path.Combine(_hostEnvironment.WebRootPath, imagePath.Replace("/", Path.DirectorySeparatorChar.ToString()));
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                try { System.IO.File.Delete(fullPath); }
+                catch (Exception ex) { Console.WriteLine($"❌ Không thể xóa ảnh: {imagePath}. Lỗi: {ex.Message}"); }
+            }
+        }
+
         public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
             var totalProducts = await _context.Products.CountAsync();
-
-            var products = await _context.Products
-                .Include(p => p.Categorys)
-                .Include(p => p.Brands)
-                .Include(p => p.Warehouse) // thêm dòng này
+            var products = await _context.Products.Include(p => p.Categorys).Include(p => p.Brands).Include(p => p.Warehouse)
                 .OrderByDescending(p => p.ProductId)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
@@ -38,8 +104,8 @@ namespace ShopDongY.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.BrandId = new SelectList(_context.Brands, "BrandId", "BrandName");
-            ViewBag.CategoryId = new SelectList(_context.Categories, "CategoryId", "CategoryName");
+            LoadUnitOptions();
+            LoadDropdowns();
             return View();
         }
 
@@ -47,74 +113,30 @@ namespace ShopDongY.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductModel product)
         {
-            // Hàm load lại dropdown
-            void LoadSelectLists()
-            {
-                ViewBag.BrandId = new SelectList(_context.Brands, "BrandId", "BrandName");
-                ViewBag.CategoryId = new SelectList(_context.Categories, "CategoryId", "CategoryName");
-            }
+            LoadUnitOptions();
+            LoadDropdowns();
 
-            // Kiểm tra tên trùng
-            var existingProduct = await _context.Products
-                .FirstOrDefaultAsync(p => p.ProductName == product.ProductName);
-
+            var existingProduct = await _context.Products.FirstOrDefaultAsync(p => p.ProductName == product.ProductName);
             if (existingProduct != null)
-            {
                 ModelState.AddModelError("ProductName", "Tên sản phẩm đã tồn tại.");
-            }
 
-            // Nếu dữ liệu không hợp lệ thì load lại View
             if (!ModelState.IsValid)
-            {
-                LoadSelectLists();
                 return View(product);
-            }
 
-            // Xử lý ảnh
-            var file = HttpContext.Request.Form.Files["ProductImage"];
-            if (file != null && file.Length > 0)
-            {
-                var fileName = Path.GetFileName(file.FileName);
-                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "product_image");
-                var fullPath = Path.Combine(uploadPath, fileName);
-
-                // Tạo thư mục nếu chưa có
-                if (!Directory.Exists(uploadPath))
-                {
-                    Directory.CreateDirectory(uploadPath);
-                }
-
-                // Kiểm tra trùng file ảnh
-                if (System.IO.File.Exists(fullPath))
-                {
-                    ModelState.AddModelError("ProductImage", "Hình ảnh đã tồn tại trên hệ thống.");
-                    LoadSelectLists();
-                    return View(product);
-                }
-
-                // Lưu file ảnh
-                using (var stream = new FileStream(fullPath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
-
-                product.ProductImage = "image/product_image/" + fileName;
-            }
-
-            // Ngày tạo
-            product.ProductDay = DateTime.Now;
-
-            // Sinh mã Code không trùng
-            int newCode;
-            do
-            {
-                newCode = new Random().Next(100000, 999999);
-            } while (_context.Products.Any(p => p.Code == newCode));
-            product.Code = newCode;
-
-            // Thêm vào DB với try-catch
             try
             {
+                product.ProductImage = await SaveImage(HttpContext.Request.Form.Files["ProductImage"]);
+                product.ProductImage1 = await SaveImage(HttpContext.Request.Form.Files["ProductImage1"]);
+                product.ProductImage2 = await SaveImage(HttpContext.Request.Form.Files["ProductImage2"]);
+                product.ProductImage3 = await SaveImage(HttpContext.Request.Form.Files["ProductImage3"]);
+
+                product.ProductDay = DateTime.Now;
+
+                int newCode;
+                do { newCode = new Random().Next(100000, 999999); }
+                while (_context.Products.Any(p => p.Code == newCode));
+                product.Code = newCode;
+
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Sản phẩm đã được thêm thành công.";
@@ -123,7 +145,6 @@ namespace ShopDongY.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Lỗi khi lưu sản phẩm: " + ex.Message);
-                LoadSelectLists();
                 return View(product);
             }
         }
@@ -132,11 +153,10 @@ namespace ShopDongY.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var product = await _context.Products.FindAsync(id);
-            if (product == null)
-                return NotFound();
+            if (product == null) return NotFound();
 
-            ViewBag.BrandId = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
-            ViewBag.CategoryId = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
+            LoadUnitOptions();
+            LoadDropdowns(product.BrandId, product.CategoryId);
             return View(product);
         }
 
@@ -144,27 +164,18 @@ namespace ShopDongY.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductModel product)
         {
-            if (id != product.ProductId)
-                return NotFound();
+            if (id != product.ProductId) return NotFound();
 
-            void LoadSelectLists()
-            {
-                ViewBag.BrandId = new SelectList(_context.Brands, "BrandId", "BrandName", product.BrandId);
-                ViewBag.CategoryId = new SelectList(_context.Categories, "CategoryId", "CategoryName", product.CategoryId);
-            }
+            LoadUnitOptions();
+            LoadDropdowns(product.BrandId, product.CategoryId);
 
-            // Kiểm tra tên trùng trừ chính nó
             var existingProduct = await _context.Products
                 .FirstOrDefaultAsync(p => p.ProductName == product.ProductName && p.ProductId != product.ProductId);
-
             if (existingProduct != null)
                 ModelState.AddModelError("ProductName", "Tên sản phẩm đã tồn tại.");
 
             if (!ModelState.IsValid)
-            {
-                LoadSelectLists();
                 return View(product);
-            }
 
             try
             {
@@ -176,32 +187,20 @@ namespace ShopDongY.Areas.Admin.Controllers
                 productInDb.Price = product.Price;
                 productInDb.BrandId = product.BrandId;
                 productInDb.CategoryId = product.CategoryId;
+                productInDb.QuantityPerUnit = product.QuantityPerUnit;
+                productInDb.Unit = product.Unit;
 
-                // Xử lý ảnh mới nếu có
-                var file = HttpContext.Request.Form.Files["ProductImage"];
-                if (file != null && file.Length > 0)
-                {
-                    var fileName = Path.GetFileName(file.FileName);
-                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "image", "product_image");
-                    var fullPath = Path.Combine(uploadPath, fileName);
+                var image = await SaveImage(HttpContext.Request.Form.Files["ProductImage"]);
+                if (!string.IsNullOrEmpty(image)) productInDb.ProductImage = image;
 
-                    if (!Directory.Exists(uploadPath))
-                        Directory.CreateDirectory(uploadPath);
+                var image1 = await SaveImage(HttpContext.Request.Form.Files["ProductImage1"]);
+                if (!string.IsNullOrEmpty(image1)) productInDb.ProductImage1 = image1;
 
-                    if (System.IO.File.Exists(fullPath))
-                    {
-                        ModelState.AddModelError("ProductImage", "Hình ảnh đã tồn tại.");
-                        LoadSelectLists();
-                        return View(product);
-                    }
+                var image2 = await SaveImage(HttpContext.Request.Form.Files["ProductImage2"]);
+                if (!string.IsNullOrEmpty(image2)) productInDb.ProductImage2 = image2;
 
-                    using (var stream = new FileStream(fullPath, FileMode.Create))
-                    {
-                        await file.CopyToAsync(stream);
-                    }
-
-                    productInDb.ProductImage = "image/product_image/" + fileName;
-                }
+                var image3 = await SaveImage(HttpContext.Request.Form.Files["ProductImage3"]);
+                if (!string.IsNullOrEmpty(image3)) productInDb.ProductImage3 = image3;
 
                 await _context.SaveChangesAsync();
                 TempData["Success"] = "Cập nhật sản phẩm thành công.";
@@ -210,10 +209,10 @@ namespace ShopDongY.Areas.Admin.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "Lỗi khi cập nhật: " + ex.Message);
-                LoadSelectLists();
                 return View(product);
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -222,9 +221,7 @@ namespace ShopDongY.Areas.Admin.Controllers
                 .Include(p => p.Categorys)
                 .FirstOrDefaultAsync(p => p.ProductId == id);
 
-            if (product == null)
-                return NotFound();
-
+            if (product == null) return NotFound();
             return View(product);
         }
 
@@ -233,37 +230,31 @@ namespace ShopDongY.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _context.Products.FindAsync(id);
-            if (product == null)
-                return NotFound();
+            if (product == null) return NotFound();
 
             try
             {
-                // 👉 Xóa file ảnh nếu tồn tại
-                if (!string.IsNullOrEmpty(product.ProductImage))
-                {
-                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", product.ProductImage);
-                    if (System.IO.File.Exists(imagePath))
-                    {
-                        System.IO.File.Delete(imagePath);
-                    }
-                }
+                var imagePaths = new[] {
+                    product.ProductImage,
+                    product.ProductImage1,
+                    product.ProductImage2,
+                    product.ProductImage3
+                };
 
-                // 👉 Xóa khỏi CSDL
+                foreach (var imagePath in imagePaths.Where(p => !string.IsNullOrEmpty(p)))
+                    DeleteImageFile(imagePath);
+
                 _context.Products.Remove(product);
                 await _context.SaveChangesAsync();
 
-                TempData["Success"] = "Xóa sản phẩm thành công.";
+                TempData["Success"] = "✅ Sản phẩm và các hình ảnh liên quan đã được xóa.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Lỗi khi xóa sản phẩm: " + ex.Message;
+                TempData["Error"] = "❌ Lỗi khi xóa sản phẩm: " + ex.Message;
                 return RedirectToAction(nameof(Index));
             }
         }
-
-
-
-
     }
 }

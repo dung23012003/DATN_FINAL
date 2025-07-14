@@ -2,11 +2,12 @@
 
 @{
     ViewData["Title"] = "Giỏ hàng của bạn";
-    var total = Model.Sum(item => item.Product.Price * item.Quantity);
-    var totalProduct = Model.Sum(item => item.Quantity);
+    int totalProduct = Model.Sum(item => item.Quantity);
+
+    decimal total = 0; // Tổng tiền đã giảm
 }
 
-<div class="containers my-4">
+<div class="containers my-4 py-5">
     <div class="row">
         <!-- Bên trái: Danh sách sản phẩm -->
         <div class="col-md-8">
@@ -26,12 +27,38 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
+                            var price = item.Product.Price;
+
+                            // Xử lý giảm giá nếu có
+                            var discounts = item.Product.Discounts as IEnumerable<ShopDongY.Models.DiscountModel>;
+                            var discount = discounts?.FirstOrDefault(d => d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
+
+                            decimal finalPrice = price;
+                            if (discount != null)
+                            {
+                                finalPrice = discount.IsPercentage
+                                ? price - (price * discount.DiscountAmount / 100)
+                                : price - discount.DiscountAmount;
+                            }
+
+                            var itemTotal = finalPrice * item.Quantity;
+                            total += itemTotal;
+
                             <tr>
                                 <td class="text-start">
                                     <strong>@item.Product.ProductName</strong><br />
-                                    
                                 </td>
-                                <td>@item.Product.Price.ToString("N0")₫</td>
+                                <td>
+                                    @if (discount != null)
+                                    {
+                                        <span class="text-muted text-decoration-line-through me-1">@price.ToString("N0")₫</span>
+                                        <span class="text-danger fw-bold">@finalPrice.ToString("N0")₫</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-danger fw-bold">@price.ToString("N0")₫</span>
+                                    }
+                                </td>
                                 <td>
                                     <div class="d-flex justify-content-center align-items-center">
                                         <form asp-action="UpdateQuantity" method="post" class="d-inline">
@@ -47,8 +74,7 @@
                                         </form>
                                     </div>
                                 </td>
-                                <td class="text-danger fw-bold">@((item.Product.Price * item.Quantity).ToString("N0") + " VNĐ")</td>
-
+                                <td class="text-danger fw-bold">@itemTotal.ToString("N0") VNĐ</td>
                                 <td>
                                     <form asp-action="Remove" method="post">
                                         <input type="hidden" name="productId" value="@item.Product.ProductId" />
@@ -61,6 +87,7 @@
                         }
                     </tbody>
                 </table>
+
                 <div class="d-flex justify-content-between mt-3">
                     <a asp-controller="Home" asp-action="Index" class="btn btn-outline-success">
                         <i class="fas fa-shopping-cart me-1"></i> Mua thêm sản phẩm khác
@@ -73,9 +100,7 @@
                     <a asp-controller="Cart" asp-action="Checkout" class="btn btn-danger">
                         <i class="fas fa-credit-card me-1"></i> Mua hàng
                     </a>
-
                 </div>
-
             </div>
         </div>
 
@@ -99,7 +124,6 @@
                     <p class="m-0">Giao hàng miễn phí<br />tại HN và HCM</p>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

@@ -1,27 +1,31 @@
 ﻿@model List<ShopDongY.Models.ProductModel>
 
 @{
-    ViewData["Title"] = "Danh sách sản phẩm";
+    ViewData["Title"] = "📋 Danh sách sản phẩm";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
-    var currentPage = ViewBag.CurrentPage;
-    var totalPages = ViewBag.TotalPages;
+    int currentPage = ViewBag.CurrentPage;
+    int totalPages = ViewBag.TotalPages;
 }
 
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-success">📋 Danh sách sản phẩm của Thảo mộc An Nhiên</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus-circle me-1"></i> Thêm mới
+    </a>
+</div>
 
-<a asp-action="Create" class="btn btn-success mb-3">Thêm Mới</a>
-
-<table class="table table-bordered table-striped">
-    <thead>
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark text-center">
         <tr>
-            <th>Id</th>
-            <th>Tên sản phẩm</th>
-            <th>Giá</th>
-            <th>Danh mục</th>
-            <th>Thương hiệu</th>
-            <th>Đã nhập</th>
-            <th>Đã bán</th>
-            <th>Tồn kho</th>
-            <th style="width: 150px;">Thao tác</th>
+            <th>🆔 Mã</th>
+            <th>📦 Tên sản phẩm</th>
+            <th>💰 Giá</th>
+            <th>📂 Danh mục</th>
+            <th>🏷️ Thương hiệu</th>
+            <th>📥 Nhập</th>
+            <th>📤 Bán</th>
+            <th>📦 Tồn</th>
+            <th style="width: 200px;">⚙️ Thao tác</th>
         </tr>
     </thead>
     <tbody>
@@ -29,24 +33,27 @@
         {
             var warehouse = item.Warehouse;
             <tr>
-                <td>@item.ProductId</td>
-
+                <td class="text-center">@item.ProductId</td>
                 <td>@item.ProductName</td>
                 <td>@item.Price.ToString("N0") ₫</td>
                 <td>@item.Categorys?.CategoryName</td>
                 <td>@item.Brands?.BrandName</td>
-                <td>@(warehouse?.TotalImported ?? 0)</td>
-                <td>@(warehouse?.TotalSold ?? 0)</td>
-                <td>@(warehouse?.QuantityInStock ?? 0)</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-primary me-1">Sửa</a>
-                    <a asp-action="Delete" asp-route-id="@item.ProductId" class="btn btn-sm btn-danger"
-                       onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">
-                        Xóa
+                <td class="text-center">@(warehouse?.TotalImported ?? 0)</td>
+                <td class="text-center">@(warehouse?.TotalSold ?? 0)</td>
+                <td class="text-center">@(warehouse?.QuantityInStock ?? 0)</td>
+                <td class="text-center text-nowrap">
+                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-warning me-1" title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductId"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');"
+                       class="btn btn-sm btn-danger me-1" title="Xóa">
+                        <i class="fas fa-trash-alt"></i>
                     </a>
                     <a asp-area="Admin" asp-controller="Warehouse" asp-action="Create" asp-route-productId="@item.ProductId"
-                       class="btn btn-sm btn-success">Nhập Hàng</a>
-
+                       class="btn btn-sm btn-success" title="Nhập kho">
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
                 </td>
             </tr>
         }
@@ -54,13 +61,16 @@
 </table>
 
 <!-- Phân trang -->
-<nav aria-label="Page navigation">
-    <ul class="pagination">
-        @for (int i = 1; i <= totalPages; i++)
-        {
-            <li class="page-item @(i == currentPage ? "active" : "")">
-                <a class="page-link" href="?page=@i">@i</a>
-            </li>
-        }
-    </ul>
-</nav>
+@if (totalPages > 1)
+{
+    <nav aria-label="Pagination" class="d-flex justify-content-center mt-4">
+        <ul class="pagination">
+            @for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a class="page-link" href="?page=@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

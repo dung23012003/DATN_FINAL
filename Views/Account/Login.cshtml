@@ -1,32 +1,64 @@
 ﻿@{
     ViewData["Title"] = "Đăng nhập";
 }
-<div class="auth-form">
-    <h2>Đăng nhập</h2>
-    <p>Chưa có tài khoản? <a asp-action="Register">Đăng ký</a></p>
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger text-center fw-semibold">
-            <i class="fas fa-exclamation-circle me-2"></i> @ViewBag.Error
-        </div>
-    }
-
+<div class="auth-form shadow p-4 rounded bg-white mx-auto" style="max-width: 450px; margin-top: 60px;">
+    <h2 class="text-primary mb-2"><i class="fas fa-user-lock me-2"></i>Đăng nhập</h2>
+    <p class="text-muted mb-4">
+        Chưa có tài khoản? <a asp-action="Register" class="text-decoration-none">Đăng ký ngay</a>
+    </p>
 
     <form asp-action="Login" method="post">
-        <div class="form-group">
-            <label>Email</label>
-            <input name="useremail" class="form-control" required />
+        <div class="mb-3">
+            <label class="form-label">📧 Email</label>
+            <input name="useremail" class="form-control" placeholder="Nhập email" required />
         </div>
-        <div class="form-group">
-            <label>Mật khẩu</label>
-            <input name="password" type="password" class="form-control" required />
+        <div class="mb-3">
+            <label class="form-label">🔒 Mật khẩu</label>
+            <input name="password" type="password" class="form-control" placeholder="Nhập mật khẩu" required />
         </div>
-        <div class="form-check my-2">
-            <input type="checkbox" class="form-check-input" id="rememberMe">
-            <label class="form-check-label" for="rememberMe">Ghi nhớ</label>
-            <a asp-action="ForgotPassword" asp-controller="Account" class="float-end small">Quên mật khẩu?</a>
+
+        <div class="form-check d-flex justify-content-between align-items-center my-3">
+            <div>
+                <input type="checkbox" class="form-check-input" id="rememberMe">
+                <label class="form-check-label" for="rememberMe">Ghi nhớ</label>
+            </div>
+            <a asp-action="ForgotPassword" asp-controller="Account" class="small text-decoration-none text-muted">
+                Quên mật khẩu?
+            </a>
         </div>
-        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+
+        <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-sign-in-alt me-1"></i> Đăng nhập
+        </button>
     </form>
 </div>
+@section Scripts {
+    <script>
+        @if (TempData["Success"] != null)
+        {
+            <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])),
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+            </text>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <text>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Thất bại',
+                        text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Error)),
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+            </text>
+        }
+    </script>
+}

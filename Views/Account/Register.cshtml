@@ -4,66 +4,83 @@
 }
 <partial name="_ValidationScriptsPartial" />
 
-
-<div class="auth-form">
-    <h2>Đăng ký tài khoản</h2>
-    <p>Đã có tài khoản? <a asp-action="Login">Đăng nhập</a></p>
+<div class="auth-form shadow p-4 rounded bg-white mx-auto" style="max-width: 700px; margin-top: 60px;">
+    <h2 class="text-primary mb-3"><i class="fas fa-user-plus me-2"></i>Đăng ký tài khoản</h2>
+    <p class="text-muted mb-4">Đã có tài khoản? <a asp-action="Login" class="text-decoration-none">Đăng nhập</a></p>
 
     <form asp-action="Register" method="post">
         <div class="row">
-            <div class="col-md-6">
-                <label>Họ tên *</label>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">👤 Họ tên *</label>
                 <input asp-for="UserName" class="form-control" required />
-                <span asp-validation-for="UserName" class="text-danger"></span>
+                <span asp-validation-for="UserName" class="text-danger small"></span>
             </div>
-            <div class="col-md-6">
-                <label>Email *</label>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">📧 Email *</label>
                 <input asp-for="Email" class="form-control" required />
-                <span asp-validation-for="Email" class="text-danger"></span>
-
+                <span asp-validation-for="Email" class="text-danger small"></span>
             </div>
         </div>
 
-        <div class="row mt-2">
-            <div class="col-md-6">
-                <label>Số điện thoại</label>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">📱 Số điện thoại</label>
                 <input asp-for="PhoneNumur" class="form-control" />
             </div>
-            <div class="col-md-6">
-                <label>Địa chỉ *</label>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">🏠 Địa chỉ *</label>
                 <input asp-for="Address" class="form-control" required />
             </div>
         </div>
 
-        <div class="row mt-2">
-            <div class="col-md-6">
-                <label>Mật khẩu *</label>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">🔒 Mật khẩu *</label>
                 <input asp-for="Password" class="form-control" type="password" required />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <span asp-validation-for="Password" class="text-danger small"></span>
             </div>
-            <div class="col-md-6">
-                <label>Nhập lại mật khẩu *</label>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">🔒 Nhập lại mật khẩu *</label>
                 <input name="ConfirmPassword" class="form-control" type="password" required />
-                <span class="text-danger">@Html.ValidationMessage("Password")</span>
-
+                <span class="text-danger small">@Html.ValidationMessage("Password")</span>
             </div>
         </div>
 
         <div class="form-check my-3">
             <input type="checkbox" class="form-check-input" id="terms" required>
-            <label class="form-check-label" for="terms">Tôi đồng ý với <a href="#">Điều khoản</a></label>
+            <label class="form-check-label" for="terms">
+                Tôi đồng ý với <a href="#" class="text-decoration-none">Điều khoản</a>
+            </label>
         </div>
 
-        <button class="btn btn-primary w-100">Tạo tài khoản</button>
+        <button class="btn btn-success w-100">
+            <i class="fas fa-user-check me-2"></i>Tạo tài khoản
+        </button>
     </form>
+
     @if (!ViewData.ModelState.IsValid)
     {
-        <div class="alert alert-danger">
+        <div class="alert alert-danger mt-3">
             @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
             {
                 <div>@error.ErrorMessage</div>
             }
         </div>
     }
-
 </div>
+@section Scripts {
+    <script>
+        @if (TempData["Success"] != null)
+        {
+            <text>
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Thành công',
+                        text: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(TempData["Success"])),
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+            </text>
+        }
+    </script>
+}

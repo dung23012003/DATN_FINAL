@@ -1,45 +1,56 @@
 ﻿@model IEnumerable<ShopDongY.Models.RoleModel>
 
 @{
-    ViewData["Title"] = "Quản lý vai trò";
+    ViewData["Title"] = "🛡️ Quản lý vai trò";
     Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-success">🛡️ Quản lý vai trò</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus-circle me-1"></i> Thêm Vai Trò
+    </a>
+</div>
 
-<a asp-action="Create" class="btn btn-success mb-3">Thêm Mới</a>
-
-<table class="table table-bordered">
-    <thead>
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-secondary text-center">
         <tr>
             <th>Tên vai trò</th>
-            <th class="text-end">Hành động</th>
+            <th style="width: 160px;">Thao tác</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var role in Model)
         {
             <tr>
-                <td>@user.RoleName</td>
-                <td class="text-end">
-                    <!-- Canh phải nút sửa & xóa -->
-                    <a asp-action="Edit" asp-route-id="@user.RoleId" class="btn btn-primary btn-sm">Sửa</a>
-                    <a asp-action="Delete" asp-route-id="@user.RoleId" class="btn btn-danger btn-sm ms-2">Xoá</a>
+                <td>@role.RoleName</td>
+                <td class="text-center text-nowrap">
+                    <a asp-action="Edit" asp-route-id="@role.RoleId" class="btn btn-sm btn-warning me-1" title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@role.RoleId"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Bạn có chắc muốn xóa vai trò này không?');"
+                       title="Xóa vai trò">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-
 <!-- Phân trang -->
-<div class="text-center">
-    <ul class="pagination justify-content-center">
-        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
-        {
-            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
-            </li>
-        }
-    </ul>
-</div>
+@if (ViewBag.TotalPages > 1)
+{
+    <nav aria-label="Pagination">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}

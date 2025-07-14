@@ -44,7 +44,26 @@ namespace ShopDongY.Areas.Admin.Controllers
             return View(orders);
         }
 
+        public IActionResult RevenueByMonth()
+        {
+            var currentYear = DateTime.Now.Year;
 
+            var revenueByMonth = _context.Orders
+                .Where(o => o.OrderDate.Year == currentYear && o.Status == OrderModel.OrderStatus.Completed)
+                .GroupBy(o => o.OrderDate.Month)
+                .Select(g => new { Month = g.Key, Total = g.Sum(o => o.TotalAmount) })
+                .ToList();
+
+            var months = Enumerable.Range(1, 12).Select(m =>
+            {
+                var monthData = revenueByMonth.FirstOrDefault(x => x.Month == m);
+                return monthData?.Total ?? 0;
+            }).ToList();
+
+            ViewBag.RevenueList = months;
+
+            return View();
+        }
         public IActionResult Details(int orderId)
         {
             var order = _context.Orders

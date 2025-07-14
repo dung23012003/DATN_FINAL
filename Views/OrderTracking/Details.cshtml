@@ -5,95 +5,99 @@
     var isOnline = Model.Payment != null;
 }
 
-<h2 class="text-primary">Chi tiết đơn hàng #@Model.OrderId</h2>
+<h2 class="text-success fw-bold mb-4"><i class="fas fa-file-invoice me-2"></i>Chi tiết đơn hàng #@Model.OrderId</h2>
 
-<div class="row">
-    <!-- Thông tin đơn hàng -->
+<div class="row mb-4">
+    <!-- Thông tin khách hàng -->
     <div class="col-md-6">
-        <h5>Thông tin khách hàng</h5>
-        <p><strong>Họ tên:</strong> @Model.User?.UserName</p>
-        <p><strong>Email:</strong> @Model.OrderEmail</p>
-        <p><strong>Số điện thoại:</strong> @Model.PhoneNumber</p>
-        <p><strong>Địa chỉ nhận hàng:</strong> @Model.ShippingAddress</p>
-        <p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
-        @if (!string.IsNullOrEmpty(Model.Note))
-        {
-            <p><strong>Ghi chú:</strong> @Model.Note</p>
-        }
+        <div class="border rounded p-3 shadow-sm">
+            <h5 class="text-primary fw-bold mb-3"><i class="fas fa-user-circle me-2"></i>Thông tin khách hàng</h5>
+            <p><strong>👤 Họ tên:</strong> @Model.User?.UserName</p>
+            <p><strong>📧 Email:</strong> @Model.OrderEmail</p>
+            <p><strong>📱 Số điện thoại:</strong> @Model.PhoneNumber</p>
+            <p><strong>🏠 Địa chỉ:</strong> @Model.ShippingAddress</p>
+            <p><strong>📅 Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy")</p>
+            @if (!string.IsNullOrEmpty(Model.Note))
+            {
+                <p><strong>📝 Ghi chú:</strong> @Model.Note</p>
+            }
 
-        <p><strong>Phương thức thanh toán:</strong> @(isOnline ? "Online" : "COD")</p>
-        <p>
-            <strong>Trạng thái:</strong>
-            @if (Model.Status == ShopDongY.Models.OrderModel.OrderStatus.Pending)
-            {
-                <span class="badge bg-warning text-dark">Chờ xử lý</span>
-            }
-            else if (Model.Status == ShopDongY.Models.OrderModel.OrderStatus.Completed)
-            {
-                <span class="badge bg-success">Đã thanh toán</span>
-            }
-            else
-            {
-                <span class="badge bg-danger">Đã hủy</span>
-            }
-        </p>
+            <p><strong>💳 Phương thức thanh toán:</strong> @(isOnline ? "Online" : "COD")</p>
+            <p>
+                <strong>📌 Trạng thái:</strong>
+                @if (Model.Status == ShopDongY.Models.OrderModel.OrderStatus.Pending)
+                {
+                    <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i>Chờ xử lý</span>
+                }
+                else if (Model.Status == ShopDongY.Models.OrderModel.OrderStatus.Completed)
+                {
+                    <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Đã thanh toán</span>
+                }
+                else
+                {
+                    <span class="badge bg-danger"><i class="fas fa-times-circle me-1"></i>Đã hủy</span>
+                }
+            </p>
+        </div>
     </div>
 
     <!-- Thanh toán online -->
     <div class="col-md-6">
         @if (isOnline)
         {
-            <h5>Thông tin thanh toán</h5>
-            <p><strong>Ngày thanh toán:</strong> @Model.Payment?.PaymentDate.ToString("dd/MM/yyyy HH:mm")</p>
-            <p><strong>Ghi chú chuyển khoản:</strong> @Model.Payment?.TransferNote</p>
-            <p>
-                <strong>Trạng thái:</strong>
-                @if (Model.Payment.IsApproved)
-                {
-                    <span class="badge bg-success">Đã xác nhận</span>
-                }
-                else
-                {
-                    <span class="badge bg-warning text-dark">Chưa xác nhận</span>
-                }
-            </p>
+            <div class="border rounded p-3 shadow-sm h-100">
+                <h5 class="text-primary fw-bold mb-3"><i class="fas fa-wallet me-2"></i>Thông tin thanh toán</h5>
+                <p><strong>🕒 Ngày thanh toán:</strong> @Model.Payment?.PaymentDate.ToString("dd/MM/yyyy HH:mm")</p>
+                <p><strong>📝 Ghi chú chuyển khoản:</strong> @Model.Payment?.TransferNote</p>
+                <p>
+                    <strong>📌 Trạng thái:</strong>
+                    @if (Model.Payment.IsApproved)
+                    {
+                        <span class="badge bg-success"><i class="fas fa-check-circle me-1"></i>Đã xác nhận</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark"><i class="fas fa-clock me-1"></i>Chưa xác nhận</span>
+                    }
+                </p>
+            </div>
         }
     </div>
 </div>
 
-<hr />
-
 <!-- Chi tiết sản phẩm -->
-<h4 class="mt-4">Danh sách sản phẩm</h4>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Ảnh</th>
-            <th>Tên sản phẩm</th>
-            <th>Đơn giá</th>
-            <th>Số lượng</th>
-            <th>Thành tiền</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderDetails)
-        {
+<h4 class="text-primary fw-bold mt-4 mb-3"><i class="fas fa-boxes me-2"></i>Danh sách sản phẩm</h4>
+<div class="table-responsive">
+    <table class="table table-hover table-bordered shadow-sm">
+        <thead class="table-light">
             <tr>
-                <td>
-                    <img src="/@item.Product.ProductImage" alt="ảnh" width="60" height="60" class="rounded border" />
-                </td>
-                <td>@item.Product?.ProductName</td>
-                <td>@item.UnitPrice.ToString("N0") VNĐ</td>
-                <td>@item.Quantity</td>
-                <td>@item.TotalPrice.ToString("N0") VNĐ</td>
+                <th>Ảnh</th>
+                <th>Tên sản phẩm</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderDetails)
+            {
+                <tr>
+                    <td>
+                        <img src="/@item.Product.ProductImage" alt="ảnh" width="60" height="60" class="rounded border" />
+                    </td>
+                    <td>@item.Product?.ProductName</td>
+                    <td class="text-end">@item.UnitPrice.ToString("N0") VNĐ</td>
+                    <td class="text-center">@item.Quantity</td>
+                    <td class="text-end text-danger fw-bold">@item.TotalPrice.ToString("N0") VNĐ</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <!-- Tổng cộng -->
-<div class="text-end">
+<div class="text-end mt-3">
     <h5 class="text-danger fw-bold">Tổng cộng: @Model.TotalAmount.ToString("N0") VNĐ</h5>
 </div>
 
-<a asp-action="Index" class="btn btn-secondary mt-3">← Quay lại</a>
+<a asp-action="Index" class="btn btn-secondary mt-3"><i class="fas fa-arrow-left me-1"></i> Quay lại</a>

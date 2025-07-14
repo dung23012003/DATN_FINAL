@@ -1,0 +1,55 @@
+﻿@model List<ShopDongY.Models.DiscountModel>
+
+@{
+    ViewData["Title"] = "🏷️ Danh sách giảm giá";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-success">🏷️ Danh sách chương trình giảm giá</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="fas fa-plus-circle me-1"></i> Thêm giảm giá
+    </a>
+</div>
+
+<table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark text-center">
+        <tr>    
+            <th>Tên chương trình</th>
+            <th>Sản phẩm áp dụng</th>
+            <th>Số tiền giảm</th>
+            <th>Loại giảm</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th style="width: 160px;">⚙️ Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.DiscountName</td>
+                <td>@item.Product?.ProductName</td>
+                <td class="text-end text-danger fw-bold">
+                    @(item.IsPercentage
+                        ? string.Format("{0:0}%", item.DiscountAmount)   
+                        : string.Format(new System.Globalization.CultureInfo("vi-VN"), "{0:N0} ₫", item.DiscountAmount))
+
+                </td>
+                <td class="text-center">@((item.IsPercentage) ? "Phần trăm" : "Tiền mặt")</td>
+                <td class="text-center">@item.StartDate.ToString("dd/MM/yyyy")</td>
+                <td class="text-center">@item.EndDate.ToString("dd/MM/yyyy")</td>
+                <td class="text-center text-nowrap">
+                    <a asp-action="Edit" asp-route-id="@item.DiscountId" class="btn btn-sm btn-warning me-1" title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@item.DiscountId"
+                       class="btn btn-sm btn-danger"
+                       onclick="return confirm('Bạn có chắc chắn muốn xóa chương trình này?');" title="Xóa">
+                        <i class="fas fa-trash-alt"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

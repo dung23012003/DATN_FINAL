@@ -21,14 +21,38 @@ namespace ShopDongY.Controllers
         {
             int pageSize = 8;
 
+            // Tất cả sản phẩm có phân trang
             var allProducts = _context.Products
                 .Include(p => p.Categorys)
                 .Include(p => p.Brands)
                 .Include(p => p.Warehouse)
-                .OrderByDescending(p => p.ProductId); // Hoặc CreatedAt nếu có
+                .Include(p => p.Discounts)
+                .OrderByDescending(p => p.ProductId);
 
             int totalProducts = allProducts.Count();
             var products = allProducts.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+
+            // ✅ Sản phẩm đang giảm giá
+            var now = DateTime.Now;
+            var productsOnSale = allProducts
+                .Where(p => p.Discounts.Any(d => d.StartDate <= now && d.EndDate >= now))
+                .ToList();
+            ViewBag.ProductsOnSale = productsOnSale;
+
+            // ✅ Top 3 sản phẩm bán chạy nhất (dựa trên OrderDetails)
+            var topProducts = _context.OrderDetails
+                .Include(od => od.Product)
+                .GroupBy(od => od.Product)
+                .Select(g => new
+                {
+                    Product = g.Key,
+                    TotalSold = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(x => x.TotalSold)
+                .Take(3)
+                .Select(x => x.Product)
+                .ToList();
+            ViewBag.TopSellingProducts = topProducts;
 
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling((double)totalProducts / pageSize);
@@ -36,15 +60,14 @@ namespace ShopDongY.Controllers
             return View(products);
         }
 
-
-
         [HttpGet]
         public IActionResult Details(int id)
         {
             var product = _context.Products
                 .Include(p => p.Brands)
                 .Include(p => p.Categorys)
-                .Include(p => p.Warehouse) // ? Thêm dòng này
+                .Include(p => p.Discounts)
+                .Include(p => p.Warehouse)
                 .FirstOrDefault(p => p.ProductId == id);
 
             if (product == null)
@@ -65,9 +88,5 @@ namespace ShopDongY.Controllers
         {
             return View();
         }
-
-
-
-
     }
 }

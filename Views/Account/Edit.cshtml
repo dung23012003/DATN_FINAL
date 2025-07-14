@@ -5,51 +5,62 @@
 }
 <partial name="_ValidationScriptsPartial" />
 
-
-<div class="container py-5">
+<div class="container py-5 mt-4">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-lg">
+        <div class="col-lg-9">
+            <div class="card shadow-lg border-0">
                 <div class="card-body p-4">
-                    @if (!string.IsNullOrEmpty(Model.Avatar))
-                    {
-                        <div class="mb-3 text-center">
-                            <img src="/@Model.Avatar" alt="Avatar" class="rounded-circle shadow" style="width: 100px; height: 100px; object-fit: cover;" />
-                        </div>
-                    }
-                    <h4 class="mb-4 text-success fw-bold">📝 Cập nhật thông tin tài khoản</h4>
+                    <h4 class="text-success fw-bold mb-4">
+                        <i class="fas fa-user-edit me-2"></i> Cập nhật thông tin cá nhân
+                    </h4>
+
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
                         <input type="hidden" asp-for="UserId" />
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="mb-3">
+                                    <label asp-for="UserName" class="form-label">Tên đăng nhập</label>
+                                    <input asp-for="UserName" class="form-control" readonly />
+                                </div>
 
-                        <div class="mb-3">
-                            <label asp-for="UserName" class="form-label">Tên đăng nhập</label>
-                            <input asp-for="UserName" class="form-control" readonly />
+                                <div class="mb-3">
+                                    <label asp-for="Email" class="form-label">Email</label>
+                                    <input asp-for="Email" class="form-control" />
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="PhoneNumur" class="form-label">Số điện thoại</label>
+                                    <input asp-for="PhoneNumur" class="form-control" />
+                                    <span asp-validation-for="PhoneNumur" class="text-danger"></span>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label asp-for="Address" class="form-label">Địa chỉ</label>
+                                    <input asp-for="Address" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 text-center">
+                                @if (!string.IsNullOrEmpty(Model.Avatar))
+                                {
+                                    <img src="/@Model.Avatar" alt="Avatar" class="rounded-circle shadow border border-3 border-success mb-3" style="width: 120px; height: 120px; object-fit: cover;" />
+                                }
+
+                                <div class="mb-3">
+                                    <label class="form-label">Ảnh đại diện mới</label>
+                                    <input type="file" name="AvatarFile" class="form-control" accept=".jpg,.jpeg,.png" />
+                                </div>
+                            </div>
                         </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label">Email</label>
-                            <input asp-for="Email" class="form-control" />
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="PhoneNumur" class="form-label">Số điện thoại</label>
-                            <input asp-for="PhoneNumur" class="form-control" />
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Address" class="form-label">Địa chỉ</label>
-                            <input asp-for="Address" class="form-control" />
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Ảnh đại diện</label>
-                            <input type="file" name="AvatarFile" class="form-control" accept=".jpg,.jpeg,.png" />
-                        </div>
-
 
                         <div class="text-end">
-                            <button type="submit" class="btn btn-success">💾 Lưu thay đổi</button>
-                            <a asp-action="Details" class="btn btn-secondary ms-2">← Quay lại</a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-1"></i> Lưu thay đổi
+                            </button>
+                            <a asp-action="Details" class="btn btn-secondary ms-2">
+                                <i class="fas fa-arrow-left me-1"></i> Quay lại
+                            </a>
                         </div>
                     </form>
                 </div>

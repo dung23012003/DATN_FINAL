@@ -2,12 +2,17 @@
     ViewData["Title"] = "Giới thiệu";
 }
 
-<div class="container contact-wrapper">
-    <h2 class="text-success mb-4">Giới thiệu về Đông Y Store</h2>
+<div class="container contact-wrapper py-5">
+    <div class="d-flex justify-content-center py-5 mb-4">
+        <h2 class="text-success fw-bold position-relative d-inline-block" style="padding-bottom: 10px;">
+            <i class="fas fa-spa me-2"></i> Giới thiệu về Đông Y Store
+            <span style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; width: 60%; height: 3px; background-color: #198754; border-radius: 2px;"></span>
+        </h2>
+    </div>
 
-    <p class="lead mb-4">
-        Chào mừng bạn đến với <strong>Đông Y Store</strong> – nơi cung cấp các sản phẩm Đông y 100% thiên nhiên, chất lượng cao và uy tín lâu năm.
-        Chúng tôi cam kết mang đến cho khách hàng những giải pháp chăm sóc sức khỏe hiệu quả từ các thảo dược quý trong y học cổ truyền.
+
+    <p class="lead text-muted text-center mb-5">
+        <strong>Đông Y Store</strong> – nơi hội tụ tinh hoa y học cổ truyền, mang lại sức khỏe và sự an tâm cho mọi gia đình Việt.
     </p>
 
     <div class="row mb-5">
@@ -19,13 +24,66 @@
         </div>
     </div>
 
-    <h4 class="mb-3">Địa chỉ của chúng tôi</h4>
-    <p><strong>Đông Y Store</strong> - 123 Nguyễn Trãi, Quận 5, TP. Hồ Chí Minh</p>
-    <p>Điện thoại: 0909 999 999 | Email: dongystore@gmail.com</p>
+    <div class="mb-5">
+        <h4 class="mb-3 text-success">Tầm nhìn & Sứ mệnh</h4>
+        <p>
+            Với mong muốn trở thành địa chỉ đáng tin cậy hàng đầu trong lĩnh vực chăm sóc sức khỏe bằng y học cổ truyền,
+            <strong>Đông Y Store</strong> luôn nỗ lực mang đến các sản phẩm chất lượng, an toàn và hiệu quả cho mọi gia đình Việt.
+        </p>
+    </div>
 
-    <div class="mt-4">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.5034709679065!2d106.67998331428749!3d10.772228062219223!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752edcf2e9ecf7%3A0xe31e1d3b2065cf6f!2zMTIzIE5ndXnhu4VuIFRy4bqnbiwgUGjGsOG7nW5nIDcsIFF14bqtbiAxLCBIw7JhIE5haSwgVMOHoSBI4buTIE3hu5lj!5e0!3m2!1svi!2s!4v1700000000000"
-                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+    <div class="mb-5">
+        <h4 class="mb-3 text-success">Vì sao chọn chúng tôi?</h4>
+        <ul class="list-unstyled ps-3">
+            <li>✔️ Sản phẩm 100% từ thiên nhiên, không chất bảo quản</li>
+            <li>✔️ Được kiểm định chất lượng nghiêm ngặt</li>
+            <li>✔️ Đội ngũ tư vấn viên am hiểu về Đông y</li>
+            <li>✔️ Giao hàng nhanh chóng, hỗ trợ tận tình</li>
+        </ul>
+    </div>
+    <div class="mb-5">
+        <h4 class="text-success mb-3">Chứng nhận & Đối tác</h4>
+        <p>Đông Y Store tự hào là đối tác phân phối của các thương hiệu nổi tiếng như:</p>
+        <ul class="list-unstyled ps-3">
+            <li>🌿 Bà Giằng – Truyền thống hơn 100 năm</li>
+            <li>🌿 Thiên Sư – Nhân sâm và trà dưỡng sinh</li>
+            <li>🌿 An Phúc – Sản phẩm đông trùng hạ thảo</li>
+        </ul>
+        <p>Chúng tôi có đầy đủ giấy chứng nhận an toàn thực phẩm, và được cấp phép bởi Bộ Y tế.</p>
+    </div>
+
+   
+    <div class="text-center mt-5">
+        <h5 class="mb-3">Bạn đang tìm kiếm giải pháp chăm sóc sức khỏe an toàn, hiệu quả?</h5>
+        <a asp-controller="Product" asp-action="Index" class="btn btn-lg btn-primary px-5">
+            Khám phá ngay sản phẩm của chúng tôi
+        </a>
+    </div>
+
+    <div class="mb-5">
+        <h4 class="mb-3 text-success">Địa chỉ liên hệ</h4>
+        <p><strong>Thảo dược An Nhiên</strong> - 28A Lê Trọng Tấn</p>
+        <p>📞 0909 999 999 | 📧 dongystore@gmail.com</p>
+    </div>
+
+    <div class="card shadow-sm mb-5">
+        <div class="card-header bg-success text-white fw-bold">
+            Vị trí cửa hàng trên bản đồ
+        </div>
+        <div class="card-body p-0">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.9871793365313!2d105.77512361488328!3d20.964876695492543!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135abe71cf7c727%3A0x13e2f31b3c3ac26a!2zRGFpw6pob2MgTmd1eeG7hW4gVHLDoWk!5e0!3m2!1svi!2s!4v1720949748227!5m2!1svi!2s"
+                    width="100%" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+
+
+
+    </div>
+
+    <div class="text-center">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-success btn-lg px-4">
+            Khám phá sản phẩm
+        </a>
     </div>
 </div>

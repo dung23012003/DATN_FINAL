@@ -3,31 +3,109 @@
 @{
     ViewData["Title"] = "Chi tiết sản phẩm";
 }
+
 @{
     var inStock = Model.Warehouse?.QuantityInStock ?? 0;
+
+    // Xử lý giảm giá
+    var discounts = Model.Discounts as IEnumerable<ShopDongY.Models.DiscountModel>;
+    var discount = discounts?.FirstOrDefault(d =>
+        d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
+
+    decimal finalPrice = Model.Price;
+
+    if (discount != null)
+    {
+        if (discount.IsPercentage)
+        {
+            finalPrice = Model.Price - (Model.Price * discount.DiscountAmount / 100);
+        }
+        else
+        {
+            finalPrice = Model.Price - discount.DiscountAmount;
+        }
+    }
 }
 
-<div class="product-details container mt-4">
+<div class="product-details container mt-5 pt-4">
     <div class="row">
         <div class="col-md-5">
-            <div class="product-image-box shadow-sm rounded">
-                <img src="@Url.Content("~/" + Model.ProductImage)" alt="@Model.ProductName" class="img-fluid rounded" />
+            <div class="product-image-box shadow-sm rounded mb-3">
+                <img id="mainImage" src="@Url.Content("~/" + Model.ProductImage)" alt="@Model.ProductName" class="img-fluid rounded w-100" />
             </div>
+
+            <!-- Ảnh phụ: khi hover sẽ thay ảnh chính -->
+            <div class="thumbnail-wrapper">
+                @if (!string.IsNullOrEmpty(Model.ProductImage1))
+                {
+                    <img src="@Url.Content("~/" + Model.ProductImage1)" alt="Ảnh phụ 1" class="thumbnail-img" />
+                }
+                @if (!string.IsNullOrEmpty(Model.ProductImage2))
+                {
+                    <img src="@Url.Content("~/" + Model.ProductImage2)" alt="Ảnh phụ 2" class="thumbnail-img" />
+                }
+                @if (!string.IsNullOrEmpty(Model.ProductImage3))
+                {
+                    <img src="@Url.Content("~/" + Model.ProductImage3)" alt="Ảnh phụ 3" class="thumbnail-img" />
+                }
+            </div>
+
+
         </div>
+
 
         <div class="col-md-7">
             <h2 class="product-title mb-3">@Model.ProductName</h2>
-            <div class="product-price text-danger fs-4 fw-bold mb-2">@Model.Price.ToString("N0") VNĐ</div>
+            <div class="product-price fs-4 mb-3">
+                @if (discount != null)
+                {
+                    <span class="text-muted text-decoration-line-through me-2">
+                        @Model.Price.ToString("N0") VNĐ
+                    </span>
+                    <span class="text-danger fw-bold me-2">
+                        @finalPrice.ToString("N0") VNĐ
+                    </span>
 
-            <p class="text-muted mb-3">@Model.Description</p>
+                    <div class="text-success small fw-semibold mt-1">
+                        Giảm
+                        @if (discount.IsPercentage)
+                        {
+                            @($"{discount.DiscountAmount}%")
+                        }
+                        else
+                        {
+                            @($"{discount.DiscountAmount:N0} VNĐ")
+                        }
+                        – Đến: @discount.EndDate.ToString("dd/MM/yyyy")
+                    </div>
+                }
+                else
+                {
+                    <span class="text-danger fw-bold">@Model.Price.ToString("N0") VNĐ</span>
+                }
+            </div>
+
+
+            <p class="text-muted mb-3" id="descPreview">
+                @(Model.Description.Length > 250 ? Model.Description.Substring(0, 250) + "..." : Model.Description)
+                @if (Model.Description.Length > 250)
+                {
+                    <a href="javascript:void(0);" id="toggleDesc" class="text-primary">Xem thêm</a>
+                }
+            </p>
+            <p class="text-muted d-none" id="descFull">@Model.Description</p>
+
 
             <ul class="list-unstyled mb-4">
                 <li><strong>Ngày đăng:</strong> @Model.TimeAgo</li>
                 <li><strong>Danh mục:</strong> @Model.Categorys?.CategoryName</li>
                 <li><strong>Thương hiệu:</strong> @Model.Brands?.BrandName</li>
-                <li><strong>Mô Tả:</strong> @Model.Description</li>
-
-                <li><strong>Số Lượng:</strong> @Model.Warehouse?.QuantityInStock</li>
+                @if (Model.QuantityPerUnit != null)
+                {
+                    <li><strong>Số lượng :</strong> @Model.QuantityPerUnit @Model.Unit</li>
+                }
+                <li><strong>Mô tả:</strong> @Model.Description</li>
+                <li><strong>Số lượng tồn kho:</strong> @Model.Warehouse?.QuantityInStock</li>
             </ul>
 
             @if (inStock > 0)
@@ -47,14 +125,17 @@
                 </button>
             }
 
-
             <a asp-action="Index" class="btn btn-outline-secondary btn-lg ms-2">Quay lại</a>
         </div>
     </div>
+
     @if (ViewBag.RelatedProducts != null && ViewBag.RelatedProducts.Count > 0)
     {
         <hr />
-        <h3 class="mt-5 mb-4">Sản phẩm cùng danh mục</h3>
+        <h3 class="mt-5 mb-4">
+            <i class="fas fa-th-large me-2 text-success"></i> Sản phẩm cùng danh mục
+        </h3>
+
         <div class="related-carousel-container">
             <div class="related-carousel">
                 @foreach (var item in ViewBag.RelatedProducts as List<ShopDongY.Models.ProductModel>)
@@ -76,16 +157,49 @@
             <button class="carousel-nav next">&gt;</button>
         </div>
     }
-
-
 </div>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const mainImage = document.getElementById("mainImage");
+            const thumbnails = document.querySelectorAll(".thumbnail-img");
 
-<script>
-    document.querySelector(".carousel-nav.prev").addEventListener("click", function () {
-        document.querySelector(".related-carousel").scrollBy({ left: -250, behavior: 'smooth' });
-    });
+            if (!mainImage || thumbnails.length === 0) return;
 
-    document.querySelector(".carousel-nav.next").addEventListener("click", function () {
-        document.querySelector(".related-carousel").scrollBy({ left: 250, behavior: 'smooth' });
-    });
-</script>
+            // Gán src gốc vào dataset
+            mainImage.dataset.original = mainImage.getAttribute("src");
+
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener("mouseover", () => {
+                    const newSrc = thumb.getAttribute("src");
+                    if (newSrc) mainImage.setAttribute("src", newSrc);
+                });
+
+                thumb.addEventListener("mouseout", () => {
+                    const originalSrc = mainImage.dataset.original;
+                    if (originalSrc) mainImage.setAttribute("src", originalSrc);
+                });
+
+                thumb.addEventListener("click", () => {
+                    const clickedSrc = thumb.getAttribute("src");
+                    if (clickedSrc) {
+                        mainImage.setAttribute("src", clickedSrc);
+                        mainImage.dataset.original = clickedSrc; // Cập nhật lại src gốc
+                    }
+                });
+            });
+        });
+             document.addEventListener("DOMContentLoaded", function () {
+            const toggleBtn = document.getElementById("toggleDesc");
+            const preview = document.getElementById("descPreview");
+            const full = document.getElementById("descFull");
+
+            if (toggleBtn && preview && full) {
+                toggleBtn.addEventListener("click", () => {
+                    preview.classList.add("d-none");
+                    full.classList.remove("d-none");
+                });
+            }
+        });
+    </script>
+}

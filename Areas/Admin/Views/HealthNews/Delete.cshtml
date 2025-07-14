@@ -1,0 +1,30 @@
+﻿@using ShopDongY.Models
+@model HealthNewsModel
+
+@{
+    ViewData["Title"] = "Xóa bản tin";
+}
+
+<div class="container my-4">
+    <h2 class="text-danger fw-bold mb-3">🗑️ Xác nhận xóa bài viết</h2>
+
+    <div class="alert alert-warning p-4 border-start border-4 border-danger">
+        <p class="mb-2">Bạn có chắc chắn muốn xóa bài viết:</p>
+        <h5 class="text-dark fw-bold">“@Model.Title”</h5>
+
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="~/@Model.ImageUrl" class="img-thumbnail mt-3" style="max-height: 200px;" alt="Ảnh minh họa" />
+        }
+    </div>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger me-2">
+            <i class="fas fa-trash-alt"></i> Xác nhận xóa
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-times"></i> Hủy
+        </a>
+    </form>
+</div>

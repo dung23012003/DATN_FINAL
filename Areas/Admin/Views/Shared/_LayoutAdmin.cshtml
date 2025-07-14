@@ -1,11 +1,16 @@
 ﻿@{
     Layout = null;
+
     var userId = Context.Session.GetInt32("UserId");
     var userName = Context.Session.GetString("UserName");
     var avatar = string.IsNullOrEmpty(Context.Session.GetString("Avatar"))
        ? "/images/default-user-icon.png"
        : $"/{Context.Session.GetString("Avatar")}";
 }
+
+<title>@Html.Raw(ViewData["Title"])</title>
+
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -19,60 +24,66 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
     <style>
-        body {
-            display: flex;
-            min-height: 100vh;
-            margin: 0;
-        }
+      html, body {
+    height: 100%;
+    margin: 0;
+}
 
-        .sidebar {
-            width: 250px;
-            background-color: #343a40;
-            color: white;
-            padding-top: 20px;
-        }
+body {
+    display: flex;
+    min-height: 100vh;
+    margin: 0;
+}
 
-            .sidebar a {
-                color: white;
-                text-decoration: none;
-                display: block;
-                padding: 10px 20px;
-            }
+.sidebar {
+    height: 100vh; /* CHẠY DÀI TOÀN MÀN HÌNH */
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    padding-top: 20px;
+    position: fixed; /* Giữ cố định bên trái */
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+}
 
-                .sidebar a:hover,
-                .sidebar a.active {
-                    background-color: #495057;
-                }
+.sidebar a {
+    color: white;
+    text-decoration: none;
+    display: block;
+    padding: 10px 20px;
+}
 
-        .main-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background-color: #f8f9fa;
-        }
+.sidebar a:hover,
+.sidebar a.active {
+    background-color: #495057;
+}
 
-        .topbar {
-            background-color: white;
-            padding: 10px 20px;
-            border-bottom: 1px solid #ddd;
-        }
+.main-content {
+    margin-left: 250px; /* DỊCH PHẦN NỘI DUNG QUA PHẢI */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
 
-        .content-wrapper {
-            flex-grow: 1;
-            padding: 20px;
-        }
+.topbar {
+    background-color: white;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ddd;
+}
 
-        footer {
-            padding: 10px 20px;
-            background-color: #f1f1f1;
-            text-align: center;
-            margin-top: auto;
-        }
+.content-wrapper {
+    flex-grow: 1;
+    padding: 20px;
+}
 
-        a.text-success:hover {
-            text-decoration: underline;
-            color: #0a58ca !important;
-        }
+a.text-success:hover {
+    text-decoration: underline;
+    color: #0a58ca !important;
+}
+
     </style>
 </head>
 <body>
@@ -80,11 +91,11 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h5 class="text-center text-success fw-bold mb-4">
-            <i class="fas fa-leaf me-2"></i>  Đông Y Store
+            <i class="fas fa-leaf me-2"></i>  Thảo mộc An Nhiên
         </h5>
 
         <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-            <i class="fas fa-chart-line me-2"></i>Dashboard
+            <i class="fas fa-chart-line me-2"></i>Bảng điều khiển
         </a>
 
         <a asp-area="Admin" asp-controller="Product" asp-action="Index">
@@ -106,7 +117,13 @@
         <a asp-area="Admin" asp-controller="Category" asp-action="Index">
             <i class="fas fa-th-large me-2"></i>Thể loại
         </a>
+        <a asp-area="Admin" asp-controller="HealthNews" asp-action="Index">
+            <i class="fas fa-notes-medical me-2"></i>Bản tin sức khỏe
+        </a>
 
+        <a asp-area="Admin" asp-controller="Discount" asp-action="Index">
+            <i class="fas fa-tags me-2"></i>Giảm giá
+        </a>
         <a asp-area="Admin" asp-controller="PaymentApproval" asp-action="Index">
             <i class="fas fa-credit-card me-2"></i>Thanh Toán Online
         </a>
@@ -117,9 +134,22 @@
 
 
         <hr />
-        <a asp-area="" asp-controller="Account" asp-action="Logout" class="text-danger">
-            <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
-        </a>
+        <div class="mt-4 px-3">
+            <!-- Nút Đăng xuất -->
+            <a asp-area="" asp-controller="Account" asp-action="Logout"
+               class="btn btn-outline-danger w-100 text-start d-flex align-items-center gap-2 mb-2 shadow-sm">
+                <i class="fas fa-sign-out-alt fa-fw"></i>
+                <span>Đăng xuất</span>
+            </a>
+
+            <!-- Nút về trang người dùng -->
+            <a asp-area="" asp-controller="Home" asp-action="Index"
+               class="btn btn-outline-primary w-100 text-start d-flex align-items-center gap-2 shadow-sm">
+                <i class="fas fa-house-user fa-fw"></i>
+                <span>Về trang người dùng</span>
+            </a>
+        </div>
+
     </div>
 
     <!-- Main Content -->
@@ -153,10 +183,10 @@
         <div class="content-wrapper">
             @RenderBody()
         </div>
-
-        <footer>
-            &copy; 2025 - ShopDongY Admin Dashboard
-        </footer>
+        <main>
+            @RenderBody()
+        </main>
+        
     </div>
 
     <!-- Scripts -->

@@ -1,0 +1,44 @@
+﻿@using ShopDongY.Models
+@model HealthNewsModel
+
+
+<h2 class="text-success mb-4">Thêm bài viết</h2>
+
+<form asp-area="Admin" asp-controller="HealthNews" asp-action="Create" method="post" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label class="form-label">Tiêu đề</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nội dung</label>
+        <textarea asp-for="Content" class="form-control" rows="8"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ảnh đại diện</label>
+        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+    </div>
+
+
+   
+    <div asp-validation-summary="All" class="text-danger mb-2"></div>
+
+    <button type="submit" class="btn btn-success">Đăng bài</button>
+    <a class="btn btn-secondary" href="/HealthNews">Quay lại</a>
+</form>
+<img id="preview" class="img-thumbnail mb-2 d-none" style="max-height: 200px;" />
+<script>
+    const input = document.querySelector('input[type="file"]');
+    const preview = document.getElementById('preview');
+    input.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            preview.src = URL.createObjectURL(file);
+            preview.classList.remove('d-none');
+        }
+    });
+</script>

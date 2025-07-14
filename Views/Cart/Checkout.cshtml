@@ -12,6 +12,8 @@
         <div class="col-md-6">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
 
+            <!-- Các input: Họ tên, SĐT, Email, Địa chỉ, Thanh toán, Ghi chú (giữ nguyên) -->
+            <!-- ... (Giữ nguyên phần input như bạn đã viết) -->
             <div class="mb-3">
                 <label asp-for="FullName" class="form-label fw-semibold">Họ và tên</label>
                 <input asp-for="FullName" class="form-control" placeholder="Nguyễn Văn A" />
@@ -35,25 +37,21 @@
                 <input asp-for="Address" class="form-control" placeholder="123 Đường ABC, Quận XYZ" />
                 <span asp-validation-for="Address" class="text-danger small"></span>
             </div>
+
             <div class="mb-3">
                 <label asp-for="PaymentMethod" class="form-label fw-semibold">Phương thức thanh toán</label>
                 <div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="COD" id="cod" />
-                        <label class="form-check-label" for="cod">
-                            Thanh toán khi nhận hàng (COD)
-                        </label>
+                        <label class="form-check-label" for="cod">Thanh toán khi nhận hàng (COD)</label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="radio" asp-for="PaymentMethod" value="Online" id="online" />
-                        <label class="form-check-label" for="online">
-                            Thanh toán online (VNPay, Momo...)
-                        </label>
+                        <label class="form-check-label" for="online">Thanh toán online (VNPay, Momo...)</label>
                     </div>
                 </div>
                 <span asp-validation-for="PaymentMethod" class="text-danger small"></span>
             </div>
-
 
             <div class="mb-3">
                 <label asp-for="Note" class="form-label fw-semibold">Ghi chú (nếu có)</label>
@@ -65,18 +63,50 @@
         <div class="col-md-6">
             <h4 class="text-secondary mb-3">Tóm tắt đơn hàng</h4>
             <ul class="list-group mb-3">
+                @{
+                    decimal totalAmount = 0;
+                    var culture = new System.Globalization.CultureInfo("vi-VN");
+                }
+
                 @foreach (var item in Model.CartItems)
                 {
+                    var discount = item.Product.Discounts?.FirstOrDefault(d =>
+                    d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
+
+                    decimal originalPrice = item.Product.Price;
+                    decimal finalPrice = originalPrice;
+
+                    if (discount != null)
+                    {
+                        finalPrice = discount.IsPercentage
+                        ? originalPrice - (originalPrice * discount.DiscountAmount / 100)
+                        : originalPrice - discount.DiscountAmount;
+                    }
+
+                    decimal itemTotal = finalPrice * item.Quantity;
+                    totalAmount += itemTotal;
+
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div class="d-flex">
                             <img src="/@item.Product.ProductImage" alt="ảnh" width="60" height="60" class="rounded me-3 border" />
                             <div>
                                 <strong>@item.Product.ProductName</strong><br />
                                 SL: @item.Quantity
+
+                                @if (discount != null)
+                                {
+                                    <div class="text-muted small">
+                                        Đã giảm:
+                                        @(discount.IsPercentage ? discount.DiscountAmount + "%" : discount.DiscountAmount.ToString("N0") + "đ")
+                                    </div>
+                                    <div class="small text-decoration-line-through text-danger">
+                                        @originalPrice.ToString("C0", culture)
+                                    </div>
+                                }
                             </div>
                         </div>
                         <div class="text-end fw-semibold">
-                            @((item.Product.Price * item.Quantity).ToString("C0", new System.Globalization.CultureInfo("vi-VN")))
+                            @itemTotal.ToString("C0", culture)
                         </div>
                     </li>
                 }
@@ -84,7 +114,7 @@
                 <li class="list-group-item d-flex justify-content-between">
                     <strong>Tổng cộng:</strong>
                     <strong class="text-danger">
-                        @Model.CartItems.Sum(item => item.Product.Price * item.Quantity).ToString("N0") VNĐ
+                        @totalAmount.ToString("C0", culture)
                     </strong>
                 </li>
             </ul>

@@ -189,20 +189,44 @@ header {
 
 
 .carousel-inner {
-    height: 400px;
+    height: 280px;
     overflow: hidden;
     border-radius: 15px;
     position: relative;
 }
 
-    .carousel-inner img {
-        height: 100%;
-        width: 100%;
-        object-fit: contain;
-        top: 50%;
-        left: 50%;
-    }
+/* Box nền làm mờ */
+.image-box {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+    border-radius: 10px;
+    background-position: center;
+    background-size: cover;
+}
 
+/* Lớp nền mờ */
+.image-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: inherit;
+    background-position: center;
+    background-size: cover;
+    filter: blur(20px) brightness(0.4);
+    z-index: 0;
+}
+
+/* Ảnh chính nổi lên */
+.main-img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* Phần chữ "sản phẩm bán chạy" nhấp nháy */
 .carousel-caption {
     position: absolute;
     top: 50%;
@@ -211,19 +235,37 @@ header {
     text-align: center;
     width: 100%;
     padding: 10px;
-    border-radius: 10px;
+    z-index: 2;
 }
 
-    .carousel-caption h5 {
-        margin: 0 auto;
-        font-size: 1.5rem;
-        color: #ffffff;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        padding: 8px 15px;
-        display: inline-block;
-        border-radius: 20px;
+.carousel-caption h5 {
+    font-size: 1.6rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Nhấp nháy */
+.blinking-text {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.8rem;
+    color: #dc3545; /* Màu đỏ đẹp */
+    font-weight: 700;
+    text-align: center;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
+    animation: blink 1.5s infinite;
+    letter-spacing: 1px;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
     }
 
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Nút điều hướng */
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     background-color: #81c408 !important;
@@ -231,11 +273,16 @@ header {
     border-radius: 50%;
     border: 1px solid #ccc;
 }
+.carousel-control-prev,
+.carousel-control-next {
+    z-index: 10;
+}
 
 /* Product All */
 .product-all {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center; /* THÊM DÒNG NÀY để căn giữa */
     gap: 0.8rem;
     margin: 1rem auto;
     max-width: 1200px;
@@ -243,7 +290,7 @@ header {
 }
 
 .product-card {
-    width: calc((100% - 0.8rem * 5) / 4);
+    width: calc((100% - 0.8rem * 5) / 4); /* Giữ nguyên */
     position: relative;
     display: flex;
     flex-direction: column;
@@ -264,22 +311,26 @@ header {
 .image-container {
     position: relative;
     width: 100%;
-    height: 250px;
+    height: 180px;
     overflow: hidden;
+    background-color: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-    .image-container img {
-        width: 100%;
-        height: 100%;
-        object-position: center;
-    }
+.image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transition: transform 0.5s ease;
+}
 
-        .image-container img:hover {
-            transform: scale(1.1);
-            transition: transform 0.5s ease;
-        }
-
-    
+.image-container img:hover {
+    transform: scale(1.03);
+}
 
 .overlay {
     position: absolute;
@@ -302,10 +353,16 @@ header {
 }
 
 .price-product {
+    min-height: 80px;
     font-size: 1rem;
     color: #ff5722;
     font-weight: bold;
     margin-top: 0.5rem;
+}
+.price-product .invisible {
+    visibility: hidden;
+    height: 1.25rem;
+    display: block;
 }
 
 .container {
@@ -350,15 +407,15 @@ header {
 .related-carousel-container {
     position: relative;
     overflow: hidden;
-    padding: 10px 40px;
+    padding: 10px;
 }
 
 .related-carousel {
     display: flex;
-    gap: 20px;
-    transition: transform 0.4s ease;
+    gap: 16px;
     overflow-x: auto;
     scroll-behavior: smooth;
+    padding-bottom: 10px;
 }
 
 .related-item {
@@ -366,33 +423,69 @@ header {
     max-width: 220px;
 }
 
-    .related-item img {
-        height: 180px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
+.related-item .card {
+    height: 100%;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+.related-item .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.related-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    display: block;
+}
+
+.related-item .card-body {
+    padding: 12px;
+}
+
+.related-item .card-title {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.related-item p {
+    margin: 0;
+    font-size: 15px;
+}
 
 .carousel-nav {
     position: absolute;
-    top: 50%;
+    top: 45%;
     transform: translateY(-50%);
-    background-color: #ffffffcc;
-    border: none;
-    font-size: 24px;
-    padding: 6px 12px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-weight: bold;
     cursor: pointer;
-    z-index: 1;
-    border-radius: 6px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    transition: background 0.2s ease;
 }
 
-    .carousel-nav.prev {
-        left: 0;
-    }
+.carousel-nav:hover {
+    background: #f0f0f0;
+}
 
-    .carousel-nav.next {
-        right: 0;
-    }
+.carousel-nav.prev {
+    left: 0;
+}
+
+.carousel-nav.next {
+    right: 0;
+}
+
 
 .cart-table {
     background-color: #fff;
@@ -976,9 +1069,7 @@ header {
 .text-dark {
     color: #343a40;
 }
-.text-green {
-    color:paleturquoise red; /* Bootstrap Green - hoặc dùng màu bạn thích */
-}
+
 @keyframes blink-red {
     0% {
         opacity: 1;
@@ -1059,7 +1150,487 @@ header {
         min-width: 20px;
     }
 
+<style >
+.discount-tag {
+    margin-top: 80px;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: red;
+    color: white;
+    padding: 4px 8px;
+    font-weight: bold;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    z-index: 2;
+}
+
+.image-container img {
+    object-fit: contain;
+    background-color: #fff;
+}
+
+
+</style >
+
+.discount-products-row {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+}
+
+.scrolling-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+}
+
+.product-card {
+    width: 220px;
+    flex: 0 0 auto;
+}
+
+.discount-badge {
+    animation: blink 1s infinite;
+    font-weight: bold;
+    font-size: 14px;
+    z-index: 2;
+}
+.discount-tag {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: red;
+    color: white;
+    padding: 2px 8px;
+    font-size: 14px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.blink {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+.discount-slider-wrapper {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 40px;
+    padding: 0 40px; /* Để tạo khoảng cho nút trái/phải */
+}
+
+#discountSlider {
+    overflow: hidden;
+    width: 100%;
+}
+
+#discountSliderInner {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.product-card {
+    flex: 0 0 250px;
+    max-width: 250px;
+}
+
+.discount-btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+    .discount-btn:hover {
+        background-color: #28a745;
+        color: #fff;
+    }
+/* Khung ngoài chứa chính xác 4 sản phẩm = 260 * 4 */
+#discountSlider {
+    width: 1040px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+#discountSliderInner {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.product-card {
+    flex: 0 0 250px;
+    max-width: 250px;
+}
+
+.discount-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #198754;
+    color: white;
+    border: none;
+    z-index: 5;
+}
+.text-center{
+    margin-top: 20px;
+}
+.btn-cart-icon {
+    position: relative; /* Quan trọng để ::before nằm đúng */
+    overflow: hidden; /* Ngăn tràn hiệu ứng */
+    z-index: 0;
+    color: #198754;
+    border-color: #198754;
+    transition: color 0.3s ease, border-color 0.3s ease;
+}
+.btn-cart-icon::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: #198754;
+    z-index: -1;
+    transition: left 0.3s ease;
+}
+
+/* Khi hover: nền trượt vào, chữ trắng */
+.btn-cart-icon:hover::before {
+    left: 0;
+}
+.btn-cart-icon:hover {
+    color: white;             /* Chữ trắng khi hover */
+    border-color: #198754;
+}
+.discount-tag {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background-color: #dc3545; /* Màu đỏ nổi bật */
+    color: white;
+    font-size: 0.8rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-weight: bold;
+    z-index: 10;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
+.product-card.sale .card {
+    border: 2px solid #dc3545;
+    box-shadow: 0 0 10px rgba(220, 53, 69, 0.3);
+}
+.discount-slider-wrapper .btn-cart-icon {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+}
+.add-to-cart-overlay-form {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 2;
+}
+
+.btn-cart-overlay {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    transition: 0.3s;
+}
+
+    .btn-cart-overlay:hover {
+        background-color: #218838; /* đậm hơn màu success */
+        color: #fff;
+    }
+/* CSS cho nút thêm giỏ hàng nằm trong ảnh ở góc phải */
+
+}
+
+.btn-cart-overlay {
+    background-color: #fff;
+    border: 1px solid #198754;
+    color: #198754;
+    padding: 6px 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+    .btn-cart-overlay:hover {
+        background-color: #198754;
+        color: #fff;
+        transform: scale(1.1);
+    }
+/*.image-container {
+    position: relative;
+    overflow: hidden;
+}*/
+
+.add-to-cart-overlay-form {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-container:hover .add-to-cart-overlay-form {
+    opacity: 1;
+}
+/* Nút thêm giỏ hàng */
+.btn-cart-overlay {
+    background-color: #ffffff;
+    border: 1px solid #198754;
+    color: #198754;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+    /* Hover hiệu ứng */
+    .btn-cart-overlay:hover {
+        background-color: #198754;
+        color: #fff;
+        transform: scale(1.1);
+    }
+.top-selling-box {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+.carousel-caption .badge {
+    background-color: rgba(220, 53, 69, 0.85); /* đỏ mờ */
+    font-size: 0.9rem;
+}
+.top-selling-box .carousel-item {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.health-news-details {
+    max-width: 800px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+    .health-news-details h2 {
+        font-size: 2rem;
+        color: #157347;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+
+.news-thumbnail {
+    width: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.content-wrapper {
+    background-color: #f8f9fa;
+    border-left: 4px solid #198754;
+    padding: 20px;
+    border-radius: 8px;
+    line-height: 1.8;
+    font-size: 1.05rem;
+    color: #343a40;
+}
+.card-title {
+    font-size: 1.1rem;
+    color: #1c1c1c;
+}
+
+.card-text {
+    line-height: 1.4;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+.health-news-details h2 {
+    font-size: 2rem;
+}
+
+.content-wrapper {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 10px;
+    color: #333;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+.thumbnail-wrapper {
+    border-radius: 10px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+    background-color: transparent; /* Đảm bảo không có nền trắng */
+    padding: 0; /* Tránh khoảng trắng thừa */
+}
+
+.thumbnail-img {
+    border-radius: 8px;
+    width: calc((100% - 16px) / 3); /* 3 ảnh chia đều */
+    height: 80px;
+    object-fit: cover;
+    background-color: transparent; /* Không có nền */
+    border: none; /* Loại bỏ viền xám */
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .thumbnail-img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    }
 
 
 
+#mainImage {
+    width: 100%;
+    height: 400px; /* Cố định chiều cao */
+    object-fit: contain; /* Hiển thị ảnh gọn trong khung */
+    background-color: #fff; /* Tránh nền xám khi ảnh nhỏ */
+    transition: opacity 0.3s ease-in-out;
+}
 
+
+.product-image-box {
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+.btn-sm {
+    min-width: 70px;
+    white-space: nowrap;
+}
+
+/* Card chung */
+.dashboard-chart-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 420px; /* Chiều cao đồng bộ cả 2 card */
+    height: 100%;
+}
+
+/* Phần header của từng biểu đồ */
+.chart-revenue,
+.chart-top-product {
+    color: white;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+}
+
+.chart-revenue {
+    background: linear-gradient(to right, #dc3545, #c82333);
+}
+
+.chart-top-product {
+    background: linear-gradient(to right, #6610f2, #5e0dc6);
+}
+
+/* Phần thân card chứa biểu đồ */
+.dashboard-chart-card .card-body {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: #f8f9fa;
+}
+
+/* Canvas của biểu đồ */
+.dashboard-chart-card canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain;
+    max-height: 100% !important;
+}
+
+    /* Hover hiệu ứng bóng đổ */
+    .dashboard-chart-card canvas:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        transition: box-shadow 0.3s ease;
+    }
+.row.equal-height {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+ .row.equal-height > .col-xl-6 {
+     display: flex;
+     flex-direction: column;
+ }
+table td, table th {
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+table tbody tr:hover {
+    background-color: #f1f1f1;
+    transition: background 0.2s ease-in-out;
+}
+
+.table-responsive {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.table td, .table th {
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+    transition: background 0.2s ease-in-out;
+}
+
+.table-responsive {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.auth-form {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}

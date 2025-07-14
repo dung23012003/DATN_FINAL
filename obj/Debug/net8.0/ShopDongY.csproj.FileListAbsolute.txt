@@ -170,7 +170,6 @@ G:\ShopDongY\ShopDongY\obj\Debug\net8.0\ShopDongY.pdb
 G:\ShopDongY\ShopDongY\obj\Debug\net8.0\ShopDongY.genruntimeconfig.cache
 G:\ShopDongY\ShopDongY\obj\Debug\net8.0\ref\ShopDongY.dll
 G:\ShopDongY\ShopDongY\bin\Debug\net8.0\Newtonsoft.Json.dll
-G:\ShopDongY\ShopDongY\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 G:\ShopDongY\ShopDongY\obj\Debug\net8.0\scopedcss\Areas\Admin\Views\Shared\_LayoutAdmin.cshtml.rz.scp.css
 G:\ShopDongY\ShopDongY\obj\Debug\net8.0\ShopDongY.sourcelink.json
 G:\ShopDongY\ShopDongY\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
@@ -178,3 +177,4 @@ G:\ShopDongY\ShopDongY\bin\Debug\net8.0\MailKit.dll
 G:\ShopDongY\ShopDongY\bin\Debug\net8.0\MimeKit.dll
 G:\ShopDongY\ShopDongY\bin\Debug\net8.0\System.Security.Cryptography.Pkcs.dll
 G:\ShopDongY\ShopDongY\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Security.Cryptography.Pkcs.dll
+G:\ShopDongY\ShopDongY\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

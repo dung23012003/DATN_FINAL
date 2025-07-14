@@ -4,7 +4,7 @@
     ViewData["Title"] = "Duyệt thanh toán";
 }
 
-<h2 class="text-primary mb-3">Danh sách thanh toán đang chờ duyệt</h2>
+<h2 class="text-primary mb-3">📥 Danh sách thanh toán đang chờ duyệt</h2>
 
 @if (!Model.Any())
 {
@@ -12,32 +12,34 @@
 }
 else
 {
-    <table class="table table-bordered table-striped">
-        <thead class="table-light">
+    <table class="table table-bordered table-hover align-middle">
+        <thead class="table-info text-center">
             <tr>
                 <th>Mã đơn</th>
                 <th>Email khách</th>
                 <th>Tổng tiền</th>
                 <th>Nội dung CK</th>
                 <th>Ngày tạo</th>
-                <th>Duyệt</th>
+                <th style="width: 120px;">Hành động</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var payment in Model)
             {
                 <tr>
-                    <td>#@payment.OrderId</td>
-                    <td>@payment.Order.OrderEmail</td>
-                    <td>@payment.TotalAmount.ToString("N0") VNĐ</td>
+                    <td class="text-center fw-bold">#@payment.OrderId</td>
+                    <td>@payment.Order?.OrderEmail</td>
+                    <td class="text-end text-danger fw-semibold">
+                        @payment.TotalAmount.ToString("N0") VNĐ
+                    </td>
                     <td><code>@payment.TransferNote</code></td>
-                    <td>@payment.PaymentDate.ToString("dd/MM/yyyy HH:mm")</td>
-                    <td>
+                    <td class="text-center">@payment.PaymentDate.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="text-center">
                         <form asp-action="Approve" method="post">
                             <input type="hidden" name="paymentId" value="@payment.PaymentId" />
                             <button type="submit" class="btn btn-success btn-sm"
-                                    onclick="return confirm('Xác nhận duyệt thanh toán?')">
-                                Duyệt
+                                    onclick="return confirm('Xác nhận duyệt thanh toán cho đơn #@payment.OrderId?')">
+                                ✅ Duyệt
                             </button>
                         </form>
                     </td>

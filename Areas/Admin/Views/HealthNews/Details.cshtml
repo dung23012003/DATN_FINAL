@@ -1,0 +1,29 @@
+﻿@using ShopDongY.Models
+@model HealthNewsModel
+
+@{
+    ViewData["Title"] = "Chi tiết bản tin";
+}
+
+<div class="container my-4">
+    <h2 class="text-success mb-3 fw-bold">@Model.Title</h2>
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+        <div>
+            <p class="mb-1"><strong>📅 Ngày đăng:</strong> @Model.CreatedAt.ToString("dd/MM/yyyy")</p>
+            <!-- Đã bỏ phần chủ đề -->
+        </div>
+        <a class="btn btn-secondary" asp-action="Index"><i class="fas fa-arrow-left"></i> Quay lại</a>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="text-center mb-4">
+            <img src="~/@Model.ImageUrl" class="img-fluid rounded shadow-sm" style="max-height: 400px;" alt="Ảnh minh họa" />
+        </div>
+    }
+
+    <div class="border rounded p-4 bg-light lh-lg fs-6 shadow-sm">
+        @Html.Raw(Model.Content.Replace("\n", "<br />"))
+    </div>
+</div>

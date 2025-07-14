@@ -22,6 +22,33 @@ namespace ShopDongY.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HealthNewsModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HealthNews");
+                });
+
             modelBuilder.Entity("ShopDongY.Models.BrandModel", b =>
                 {
                     b.Property<int>("BrandId")
@@ -62,6 +89,43 @@ namespace ShopDongY.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ShopDongY.Models.DiscountModel", b =>
+                {
+                    b.Property<int>("DiscountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DiscountId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("DiscountName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsPercentage")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("DiscountId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("ShopDongY.Models.OrderDetailsModel", b =>
@@ -201,8 +265,29 @@ namespace ShopDongY.Migrations
                     b.Property<string>("ProductImage")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProductImage1")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductImage2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductImage3")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ProductName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("QuantityPerUnit")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Sold")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Unit")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UnitInfo")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductId");
@@ -297,6 +382,17 @@ namespace ShopDongY.Migrations
                     b.HasKey("ProductId");
 
                     b.ToTable("Warehouses");
+                });
+
+            modelBuilder.Entity("ShopDongY.Models.DiscountModel", b =>
+                {
+                    b.HasOne("ShopDongY.Models.ProductModel", "Product")
+                        .WithMany("Discounts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("ShopDongY.Models.OrderDetailsModel", b =>
@@ -401,6 +497,8 @@ namespace ShopDongY.Migrations
 
             modelBuilder.Entity("ShopDongY.Models.ProductModel", b =>
                 {
+                    b.Navigation("Discounts");
+
                     b.Navigation("Warehouse");
                 });
 

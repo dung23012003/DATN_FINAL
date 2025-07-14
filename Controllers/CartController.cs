@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ShopDongY.Data;
 using ShopDongY.Helpers;
 using ShopDongY.Models;
@@ -18,6 +19,27 @@ namespace ShopDongY.Controllers
         public IActionResult Index()
         {
             var cart = HttpContext.Session.GetObjectFromJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            // Load thêm Discount cho từng sản phẩm
+            foreach (var item in cart)
+            {
+                var productWithDiscount = _context.Products
+                    .Where(p => p.ProductId == item.Product.ProductId)
+                    .Select(p => new ProductModel
+                    {
+                        ProductId = p.ProductId,
+                        ProductName = p.ProductName,
+                        Price = p.Price,
+                        Discounts = p.Discounts.ToList()
+                    })
+                    .FirstOrDefault();
+
+                if (productWithDiscount != null)
+                {
+                    item.Product.Discounts = productWithDiscount.Discounts;
+                }
+            }
+
             return View(cart);
         }
 
@@ -131,6 +153,19 @@ namespace ShopDongY.Controllers
                 return RedirectToAction("Index");
             }
 
+            // Load lại sản phẩm từ DB kèm Discounts
+            foreach (var item in cart)
+            {
+                var product = _context.Products
+                    .Include(p => p.Discounts)
+                    .FirstOrDefault(p => p.ProductId == item.Product.ProductId);
+
+                if (product != null)
+                {
+                    item.Product = product;
+                }
+            }
+
             var model = new CheckoutViewModel
             {
                 CartItems = cart
@@ -153,7 +188,6 @@ namespace ShopDongY.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         public IActionResult Checkout(CheckoutViewModel model)
         {
@@ -164,8 +198,21 @@ namespace ShopDongY.Controllers
                 return RedirectToAction("Index", "Cart");
             }
 
+            // Load lại sản phẩm từ DB kèm Discounts để xử lý chính xác giá
+            foreach (var item in cart)
+            {
+                var product = _context.Products
+                    .Include(p => p.Discounts)
+                    .FirstOrDefault(p => p.ProductId == item.Product.ProductId);
+
+                if (product != null)
+                {
+                    item.Product = product;
+                }
+            }
+
             model.CartItems = cart;
-            ModelState.Remove(nameof(model.CartItems)); // Không cần validate giỏ hàng từ người dùng
+            ModelState.Remove(nameof(model.CartItems)); // Bỏ qua validation giỏ hàng
 
             if (!ModelState.IsValid)
             {
@@ -186,13 +233,33 @@ namespace ShopDongY.Controllers
 
             try
             {
+                // ✅ Tính tổng tiền sau giảm giá
+                decimal totalAmount = 0;
+
+                foreach (var item in cart)
+                {
+                    var discount = item.Product.Discounts?.FirstOrDefault(d =>
+                        d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
+
+                    decimal finalPrice = item.Product.Price;
+
+                    if (discount != null)
+                    {
+                        finalPrice = discount.IsPercentage
+                            ? finalPrice - (finalPrice * discount.DiscountAmount / 100)
+                            : finalPrice - discount.DiscountAmount;
+                    }
+
+                    totalAmount += finalPrice * item.Quantity;
+                }
+
                 // ✅ Tạo đơn hàng
                 var order = new OrderModel
                 {
                     UserId = userId.Value,
                     OrderDate = DateTime.Now,
                     OrderEmail = model.Email,
-                    TotalAmount = cart.Sum(c => c.Product.Price * c.Quantity),
+                    TotalAmount = totalAmount,
                     Status = OrderModel.OrderStatus.Pending,
                     ShippingAddress = model.Address,
                     PhoneNumber = model.PhoneNumber,
@@ -205,13 +272,26 @@ namespace ShopDongY.Controllers
                 // ✅ Chi tiết đơn hàng
                 foreach (var item in cart)
                 {
+                    var discount = item.Product.Discounts?.FirstOrDefault(d =>
+                        d.StartDate <= DateTime.Now && d.EndDate >= DateTime.Now);
+
+                    decimal finalPrice = item.Product.Price;
+
+                    if (discount != null)
+                    {
+                        finalPrice = discount.IsPercentage
+                            ? finalPrice - (finalPrice * discount.DiscountAmount / 100)
+                            : finalPrice - discount.DiscountAmount;
+                    }
+
                     var orderDetail = new OrderDetailsModel
                     {
                         OrderId = order.OrderId,
                         ProductId = item.Product.ProductId,
                         Quantity = item.Quantity,
-                        UnitPrice = item.Product.Price
+                        UnitPrice = finalPrice
                     };
+
                     _context.OrderDetails.Add(orderDetail);
 
                     var warehouse = _context.Warehouses.FirstOrDefault(w => w.ProductId == item.Product.ProductId);
@@ -248,8 +328,6 @@ namespace ShopDongY.Controllers
                 return View(model);
             }
         }
-
-
 
 
     }

@@ -1,19 +1,32 @@
 ﻿@model ShopDongY.Models.OrderModel
 
-<h3 class="text-primary">Chi tiết đơn hàng #@Model.OrderId</h3>
+<h3 class="text-primary mb-4">📦 Chi tiết đơn hàng #@Model.OrderId</h3>
 
-<p><strong>Khách hàng:</strong> @Model.User?.UserName</p>
-<p><strong>Email:</strong> @Model.OrderEmail</p>
-<p><strong>Địa chỉ giao hàng:</strong> @Model.ShippingAddress</p>
-<p><strong>SĐT:</strong> @Model.PhoneNumber</p>
-<p><strong>Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
-<p><strong>Ghi chú:</strong> @Model.Note</p>
+<div class="row">
+    <div class="col-md-6">
+        <p><strong>👤 Khách hàng:</strong> @Model.User?.UserName</p>
+        <p><strong>📧 Email:</strong> @Model.OrderEmail</p>
+        <p><strong>📞 SĐT:</strong> @Model.PhoneNumber</p>
+    </div>
+    <div class="col-md-6">
+        <p><strong>📍 Địa chỉ giao hàng:</strong> @Model.ShippingAddress</p>
+        <p><strong>🕒 Ngày đặt:</strong> @Model.OrderDate.ToString("dd/MM/yyyy HH:mm")</p>
+        @if (!string.IsNullOrEmpty(Model.Note))
+        {
+            <p><strong>📝 Ghi chú:</strong> @Model.Note</p>
+        }
+    </div>
+</div>
+
+<hr />
+
+<h5 class="fw-bold">🛒 Danh sách sản phẩm</h5>
 
 <table class="table table-bordered mt-3">
-    <thead>
+    <thead class="table-light">
         <tr>
-            <th>Sản phẩm</th>
-            <th>Giá</th>
+            <th>Tên sản phẩm</th>
+            <th>Đơn giá</th>
             <th>Số lượng</th>
             <th>Thành tiền</th>
         </tr>
@@ -35,4 +48,4 @@
     </tbody>
 </table>
 
-<a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+<a asp-action="Index" class="btn btn-secondary mt-3">← Quay lại</a>

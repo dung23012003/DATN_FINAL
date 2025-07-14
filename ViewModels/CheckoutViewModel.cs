@@ -18,11 +18,13 @@ namespace ShopDongY.ViewModels
         [Required(ErrorMessage = "Vui lòng nhập email")]
         [EmailAddress(ErrorMessage = "Email không hợp lệ")]
         public string Email { get; set; }
+
         [Required(ErrorMessage = "Vui lòng chọn phương thức thanh toán")]
         public string PaymentMethod { get; set; } = "COD";
-        public string? Note { get; set; }
-        [BindNever]
-        public List<CartItem> CartItems { get; set; }
 
+        public string? Note { get; set; }
+
+        // ✅ KHÔNG sử dụng [BindNever] nếu bạn cần dùng trong Controller và View
+        public List<CartItem> CartItems { get; set; } = new();
     }
 }
